@@ -129,3 +129,14 @@ body {
 .animate-themeFade {
   animation: themeFade 0.6s ease;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+}
+
