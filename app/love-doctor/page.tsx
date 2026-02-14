@@ -62,23 +62,25 @@ export default function LoveDoctor() {
         Enter both names and let Love Doctor predict your romantic future 🔮
       </p>
 
+      {/* ✅ UPDATED WHITE PREMIUM INPUT */}
       <input
         type="text"
         placeholder="Your Name"
         value={name1}
         onChange={(e) => setName1(e.target.value)}
-        className="mb-4 p-3 rounded text-black w-64"
+        className="mb-4 p-3 rounded-lg w-64 bg-white text-gray-900 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-200"
       />
 
+      {/* ✅ UPDATED WHITE PREMIUM INPUT */}
       <input
         type="text"
         placeholder="Partner Name"
         value={name2}
         onChange={(e) => setName2(e.target.value)}
-        className="mb-4 p-3 rounded text-black w-64"
+        className="mb-4 p-3 rounded-lg w-64 bg-white text-gray-900 border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-200"
       />
 
-      {/* ✅ UPDATED PREMIUM BUTTON */}
+      {/* EXISTING BUTTON — UNCHANGED */}
       <button
         onClick={generatePrediction}
         disabled={loading}
