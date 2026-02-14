@@ -21,7 +21,9 @@ export default function ValentineCardGenerator() {
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
   const [theme, setTheme] = useState("romantic");
-  const [alignment, setAlignment] = useState<"left" | "center" | "right">("center");
+  const [alignment, setAlignment] = useState<"left" | "center" | "right">(
+    "center"
+  );
   const [font, setFont] = useState("serif");
   const [error, setError] = useState<string | null>(null);
 
