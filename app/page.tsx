@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, Calculator, Flame, MessageCircle, Sparkles, PenTool, Rose, Search, Music, Music2, Volume2, VolumeX } from "lucide-react";
+import { Heart, Calculator, Flame, MessageCircle, Sparkles, PenTool, Rose, Search, Music, Music2, Volume2, VolumeX, Smile } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import FloatingHearts from "./algorithms/flames/FloatingHearts";
@@ -120,6 +120,14 @@ export default function Home() {
   icon: Heart,
   color: "from-purple-500 to-pink-500",
   path: "/love-doctor",
+},
+{
+  id: "pickup-lines",
+  title: "Pickup Lines",
+  description: "Generate fun and romantic pickup lines for any occasion",
+  icon: Smile,
+  color: "from-pink-500 to-rose-500",
+  path: "/pickup-lines",
 }
 
   ];
@@ -242,21 +250,16 @@ export default function Home() {
                 <div className="relative p-8">
                   
                   {/* Icon */}
-              <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
-                <img
-                  src={
-                    algo.id === "love-calculator"
-                      ? "/calc.webp"
-                      : algo.id === "flames"
-                      ? "/flames.webp"
-                      : algo.id === "nickname-generator"
-                      ? "/nickname.webp"
-                      : "/val-card.webp"
-                  }
-                  alt={algo.title}
-                  className="w-20 h-20 object-contain drop-shadow-md"
-                />
-              </div>
+              {/* Icon */}
+<div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+  {(() => {
+    const Icon = algo.icon;
+    return (
+      <Icon className="w-16 h-16 text-pink-500 drop-shadow-md" />
+    );
+  })()}
+</div>
+
 
 
 
