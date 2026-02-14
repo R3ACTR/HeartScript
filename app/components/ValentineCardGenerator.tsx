@@ -6,12 +6,15 @@ import {
   Download,
   FileText,
   Mail,
+  MessageCircle,
   Heart,
   ArrowLeft,
   Send,
   Copy,
   Check,
 } from "lucide-react";
+
+import { CardDownloadButton } from "../components/CardDownloadButton";
 
 interface Sticker {
   id: number;
@@ -247,14 +250,32 @@ export default function ValentineCardGenerator() {
 
       {/* STEP 2 */}
       {step === 2 && (
-        <div className="text-center">
-          <CardPreview
-            {...{ recipient, message, theme, alignment, font }}
-            stickers={stickers}
-            moveSticker={moveSticker}
-          />
+<div className="w-full max-w-4xl text-center">
+  <div className="mb-8">
+    <h2 className="font-display text-3xl font-bold text-gray-900 mb-2">
+      Preview Your Card
+    </h2>
+    <p className="text-gray-600">
+      Here&apos;s how your Valentine card will look
+    </p>
+  </div>
 
-          <div className="flex gap-4 justify-center mt-8">
+  <CardPreview
+    {...{ recipient, message, theme, alignment, font }}
+    stickers={stickers}
+    moveSticker={moveSticker}
+  />
+
+  {/* Decorative Wax Seal Download */}
+  <div className="flex justify-center mt-8 mb-10">
+    <CardDownloadButton
+      cardElementId="valentine-card-preview"
+      cardTitle={`valentine-card-${recipient || "card"}`}
+    />
+  </div>
+
+  {/* Action Buttons */}
+  <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => setStep(1)}
               className="flex items-center gap-2 border px-6 py-3"
@@ -331,3 +352,31 @@ export default function ValentineCardGenerator() {
     </main>
   );
 }
+function Step({
+  number,
+  label,
+  active,
+}: {
+  number: number;
+  label: string;
+  active: boolean;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-2 bg-white/80 backdrop-blur-sm px-3 py-2 rounded-lg">
+      <div
+        className={`w-8 h-8 rounded-full flex items-center justify-center
+        ${active ? "bg-[#800020] text-white" : "bg-gray-200 text-gray-500"}`}
+      >
+        {number}
+      </div>
+      <span
+        className={`${
+          active ? "text-[#800020] font-bold" : "text-gray-600"
+        }`}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
