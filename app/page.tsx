@@ -87,7 +87,11 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              onClick={() => router.push(algo.path)}
+              onClick={() => {
+  console.log("Navigating to:", algo.path);
+  router.push(algo.path);
+}}
+
               className="group cursor-pointer"
             >
               <div className="relative h-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-white/50">
