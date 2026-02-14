@@ -3,9 +3,20 @@
 interface Props {
   recipient: string;
   message: string;
+  theme: string;
 }
 
-export default function CardPreview({ recipient, message }: Props) {
+export default function CardPreview({ recipient, message, theme }: Props) {
+
+  const themeStyles: Record<string, string> = {
+    romantic:
+      "bg-gradient-to-br from-pink-500 via-rose-500 to-[#800020]",
+    dark:
+      "bg-gradient-to-br from-gray-800 via-gray-900 to-black",
+    pastel:
+      "bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200",
+  };
+
   return (
     <div className="relative flex items-center justify-center min-h-[520px] w-full">
 
@@ -29,10 +40,10 @@ export default function CardPreview({ recipient, message }: Props) {
         {/* card */}
         <div className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-2xl">
 
-          {/* gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-pink-500 via-rose-500 to-[#800020]" />
+          {/* gradient theme */}
+          <div className={`absolute inset-0 ${themeStyles[theme]}`} />
 
-          {/* dots */}
+          {/* dots overlay */}
           <div
             className="absolute inset-0 opacity-15"
             style={{

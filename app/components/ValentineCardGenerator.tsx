@@ -4,60 +4,49 @@ import { useState } from "react";
 import CardPreview from "./CardPreview";
 
 export default function ValentineCardGenerator() {
-
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
+  const [theme, setTheme] = useState("romantic"); // default theme
+
+  const handleReset = () => {
+    setRecipient("");
+    setMessage("");
+    setTheme("romantic");
+  };
 
   return (
-
     <main className="flex-grow flex flex-col items-center justify-center px-4 py-8 w-full max-w-6xl mx-auto">
-
 
       {/* STEP BAR */}
       <div className="w-full max-w-3xl mb-12">
-
         <div className="relative flex justify-between items-center text-sm font-semibold text-gray-500">
 
-          {/* background line */}
-          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -z-10"></div>
-
-          {/* active progress */}
-          <div className="absolute top-1/2 left-0 w-1/3 h-0.5 bg-[#800020] -z-10"></div>
-
+          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -z-10" />
+          <div className="absolute top-1/2 left-0 w-1/3 h-0.5 bg-[#800020] -z-10" />
 
           <Step number={1} label="Personalize" active />
           <Step number={2} label="Preview" />
           <Step number={3} label="Send" />
 
         </div>
-
       </div>
-
 
 
       {/* MAIN GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full items-start">
 
-
         {/* LEFT SIDE */}
         <div className="flex flex-col gap-8">
 
           <div>
-
             <h1 className="font-display text-5xl font-bold text-gray-900 mb-3">
-
-              Create Your<br/>Valentine Card
-
+              Create Your<br />Valentine Card
             </h1>
 
             <p className="text-gray-600">
-
               Craft a message straight from the heart.
-
             </p>
-
           </div>
-
 
 
           {/* Recipient */}
@@ -71,7 +60,6 @@ export default function ValentineCardGenerator() {
 
           {/* Message */}
           <div>
-
             <textarea
               value={message}
               onChange={(e)=>setMessage(e.target.value)}
@@ -82,112 +70,73 @@ export default function ValentineCardGenerator() {
             />
 
             <div className="text-right text-xs text-gray-400 mt-1">
-
               {message.length} / 500 characters
-
             </div>
-
           </div>
 
 
-
-          {/* Accent */}
+          {/* Theme Selector */}
           <div>
-
             <span className="text-sm font-medium text-gray-700 mb-2 block">
-
-              Card Accent
-
+              Select Theme
             </span>
 
-            <div className="flex gap-3">
-
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-500 to-rose-400 ring-2 ring-[#800020]" />
-
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-400" />
-
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-red-600 to-orange-400" />
-
-            </div>
-
+            <select
+              value={theme}
+              onChange={(e)=>setTheme(e.target.value)}
+              className="px-4 py-3 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none"
+            >
+              <option value="romantic">Romantic</option>
+              <option value="dark">Dark Love</option>
+              <option value="pastel">Pastel Dream</option>
+            </select>
           </div>
 
 
+          {/* Buttons */}
+          <div className="flex gap-4">
+            <button
+              onClick={handleReset}
+              className="flex-1 bg-gray-200 hover:bg-gray-300 text-black font-bold py-4 rounded-xl"
+            >
+              Reset
+            </button>
 
-          {/* BUTTON */}
-          <button className="bg-[#800020] hover:bg-[#630019] text-white font-bold py-4 rounded-xl shadow-lg">
-
-            Next: Preview →
-
-          </button>
-
+            <button className="flex-1 bg-[#800020] hover:bg-[#630019] text-white font-bold py-4 rounded-xl shadow-lg">
+              Next: Preview →
+            </button>
+          </div>
 
         </div>
 
 
-
-        {/* RIGHT SIDE */}
+        {/* RIGHT SIDE PREVIEW */}
         <CardPreview
           recipient={recipient}
           message={message}
+          theme={theme}
         />
 
-          <textarea
-            value={message}
-            onChange={(e) => {
-              if (e.target.value.length <= 500) {
-                setMessage(e.target.value);
-              }
-            }}
-            onBlur={validate}
-            placeholder="Write your heartfelt message here..."
-            className="w-full border rounded p-2"
-          />
-
-          {errors.message && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.message}
-            </p>
-          )}
-
-          {/* Character Counter */}
-          <div className="text-sm text-gray-500 mt-1 text-right">
-            {message.length} / 500 characters
-          </div>
-        </div>
-
       </div>
-
-
     </main>
-
   );
-
 }
 
 
 
 function Step({ number, label, active }: any){
-
   return(
-
     <div className="flex flex-col items-center gap-2 bg-[#FFFBF7] px-2">
 
       <div className={`w-8 h-8 rounded-full flex items-center justify-center
       ${active ? "bg-[#800020] text-white" : "bg-gray-200 text-gray-500"}`}>
-
         {number}
-
       </div>
 
       <span className={`${active ? "text-[#800020] font-bold" : ""}`}>
-
         {label}
-
       </span>
 
     </div>
-
   );
-
 }
