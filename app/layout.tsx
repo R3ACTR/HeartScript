@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import LayoutContent from "./components/LayoutContent";
+import SplashWrapper from "./components/SplashWrapper";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -21,18 +22,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
         className={`${inter.variable} ${playfair.variable} antialiased font-sans`}
       >
-        <Navbar />
-        <LayoutContent>
-          {children}
-        </LayoutContent>
+        <SplashWrapper>
+          <Navbar />
+          <LayoutContent>
+            {children}
+          </LayoutContent>
+        </SplashWrapper>
       </body>
     </html>
   );

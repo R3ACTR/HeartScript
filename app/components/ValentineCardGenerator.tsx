@@ -1,656 +1,349 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import CardPreview from "./CardPreview";
-import { Download, FileText, Mail, MessageCircle, Heart, ArrowLeft, Send, Copy, Check } from "lucide-react";
+import {
+  Download,
+  FileText,
+  Mail,
+  MessageCircle,
+  Heart,
+  ArrowLeft,
+  Send,
+  Copy,
+  Check,
+} from "lucide-react";
+
 import { CardDownloadButton } from "../components/CardDownloadButton";
 
+interface Sticker {
+  id: number;
+  x: number;
+  y: number;
+  emoji: string;
+}
+
+/* ---------------- LOVE QUOTES ---------------- */
+const loveQuotes: string[] = [
+  "You are my today and all of my tomorrows ❤️",
+  "Every love story is beautiful, but ours is my favorite 💕",
+  "You make my heart smile 😊",
+  "With you, every moment is magical ✨",
+  "I fall for you more and more every day 💖",
+  "You are the best thing that ever happened to me 💘",
+];
+
+const MESSAGE_LIMIT = 200;
+
 export default function ValentineCardGenerator() {
+  /* ---------------- STATE ---------------- */
   const [step, setStep] = useState(1);
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
   const [theme, setTheme] = useState("romantic");
-  const [alignment, setAlignment] = useState<"left" | "center" | "right">("center");
-  const [showCopied, setShowCopied] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [alignment, setAlignment] =
+    useState<"left" | "center" | "right">("center");
   const [font, setFont] = useState("serif");
+  const [error, setError] = useState<string | null>(null);
+  const [showCopied, setShowCopied] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
 
+  const [stickers, setStickers] = useState<Sticker[]>([
+    { id: 1, x: 40, y: 40, emoji: "💖" },
+    { id: 2, x: 220, y: 90, emoji: "💕" },
+  ]);
+
+  /* ---------------- VALIDATION ---------------- */
+  const validateStepOne = () => {
+    if (!recipient.trim()) {
+      setError("Please enter the recipient’s name");
+      return false;
+    }
+    if (recipient.trim().length < 2) {
+      setError("Name must be at least 2 characters long");
+      return false;
+    }
+    if (!message.trim()) {
+      setError("Message cannot be empty");
+      return false;
+    }
+    if (message.trim().length < 2) {
+      setError("Message must be at least 2 characters long");
+      return false;
+    }
+    setError(null);
+    return true;
+  };
+
+  /* ---------------- ACTIONS ---------------- */
   const handleReset = () => {
     setRecipient("");
     setMessage("");
     setTheme("romantic");
     setAlignment("center");
     setFont("serif");
+    setError(null);
   };
 
-  const handleClearMessage = () => setMessage("");
-
-  const onEmojiClick = (emojiData: any) => {
-    setMessage(prev => prev + emojiData.emoji);
-  };
-
-  const createDownloadCard = () => {
-    const themeGradients: Record<string, string> = {
-      romantic: "linear-gradient(135deg,#ec4899,#f43f5e,#800020)",
-      dark: "linear-gradient(135deg,#1f2937,#111827,#000)",
-      pastel: "linear-gradient(135deg,#fbcfe8,#e9d5ff,#bfdbfe)",
-    };
-
-    const alignMap: Record<string,string> = {
-      left:"flex-start",
-      center:"center",
-      right:"flex-end"
-    };
-
-    const textAlignMap: Record<string,string> = {
-      left:"left",
-      center:"center",
-      right:"right"
-    };
-
-    const card = document.createElement("div");
-    card.style.cssText = `
-      position:fixed;
-      left:-9999px;
-      width:400px;
-      height:500px;
-      border-radius:16px;
-      overflow:hidden;
-      background:${themeGradients[theme]};
-    `;
-
-    card.innerHTML = `
-      <div style="
-        position:absolute;
-        inset:0;
-        display:flex;
-        flex-direction:column;
-        align-items:${alignMap[alignment]};
-        justify-content:center;
-        text-align:${textAlignMap[alignment]};
-        color:white;
-        padding:40px;
-        font-family:'Playfair Display', serif;
-      ">
-        <div style="font-size:48px;margin-bottom:20px;">❤️</div>
-
-        <h2 style="font-size:36px;font-weight:bold;margin-bottom:20px;">
-          Dear <span style="font-style:italic;text-decoration:underline;">${recipient || "Someone Special"}</span>,
-        </h2>
-
-        <p style="font-size:16px;line-height:1.6;max-width:300px;margin-bottom:30px;font-family:${font};">
-          ${message || "Your beautiful message will appear here..."}
-        </p>
-
-        <div style="font-style:italic;font-size:20px;">With Love ✨</div>
-      </div>
-    `;
-    return card;
-  };
-
-  const handleEmail = async () => {
-    try {
-      const html2canvas = (await import("html2canvas")).default;
-
-      const downloadCard = createDownloadCard();
-      document.body.appendChild(downloadCard);
-
-      const canvas = await html2canvas(downloadCard, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        logging: false,
-      });
-
-      document.body.removeChild(downloadCard);
-
-      const imageData = canvas.toDataURL("image/png");
-
-      const subject = encodeURIComponent(`Valentine Card for ${recipient}`);
-      const body = encodeURIComponent(
-        `Dear ${recipient},\n\n${message}\n\nWith Love ❤️`
-      );
-
-      window.location.href = `mailto:?subject=${subject}&body=${body}`;
-
-      const link = document.createElement("a");
-      link.download = `valentine-card-${recipient || "card"}.png`;
-      link.href = imageData;
-      link.click();
-
-      alert("Email client opened! The card image has been downloaded.");
-    } catch (error) {
-      console.error("Email failed:", error);
-      alert("Failed to prepare email.");
-    }
-  };
-
-  const handleWhatsApp = async () => {
-    try {
-      setIsGenerating(true);
-      const html2canvas = (await import("html2canvas")).default;
-
-      const downloadCard = createDownloadCard();
-      document.body.appendChild(downloadCard);
-
-      const canvas = await html2canvas(downloadCard, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        logging: false,
-      });
-
-      document.body.removeChild(downloadCard);
-
-      const imageData = canvas.toDataURL("image/png");
-      
-      // Create a temporary link to download the image
-      const link = document.createElement("a");
-      link.download = `valentine-card-${recipient || "card"}.png`;
-      link.href = imageData;
-      link.click();
-      
-      // Open WhatsApp with pre-filled message
-      const text = encodeURIComponent(`Dear ${recipient},\n${message}\n\nWith Love ❤️`);
-      window.open(`https://wa.me/?text=${text}`, '_blank');
-      
-      alert("Card image downloaded! Now you can share it on WhatsApp.");
-    } catch (error) {
-      console.error("WhatsApp sharing failed:", error);
-      alert("Failed to prepare card for WhatsApp.");
-    } finally {
-      setIsGenerating(false);
-    }
+  const generateRandomQuote = () => {
+    const randomIndex = Math.floor(Math.random() * loveQuotes.length);
+    setMessage(loveQuotes[randomIndex]);
+    setError(null);
   };
 
   const handleCopyLink = async () => {
-    try {
-      setIsGenerating(true);
-      const html2canvas = (await import("html2canvas")).default;
-
-      const downloadCard = createDownloadCard();
-      document.body.appendChild(downloadCard);
-
-      const canvas = await html2canvas(downloadCard, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        logging: false,
-      });
-
-      document.body.removeChild(downloadCard);
-
-      const imageData = canvas.toDataURL("image/png");
-      
-      // Copy image to clipboard
-      const response = await fetch(imageData);
-      const blob = await response.blob();
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob })
-      ]);
-      
-      setShowCopied(true);
-      setTimeout(() => setShowCopied(false), 2000);
-    } catch (error) {
-      console.error("Copy failed:", error);
-      alert("Failed to copy to clipboard. Please try downloading instead.");
-    } finally {
-      setIsGenerating(false);
-    }
+    await navigator.clipboard.writeText(window.location.href);
+    setShowCopied(true);
+    setTimeout(() => setShowCopied(false), 2000);
   };
 
-  const handleDownloadImage = async () => {
-    try {
-      setIsGenerating(true);
-      const html2canvas = (await import("html2canvas")).default;
-
-      const downloadCard = createDownloadCard();
-      document.body.appendChild(downloadCard);
-
-      const canvas = await html2canvas(downloadCard, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        logging: false,
-      });
-
-      document.body.removeChild(downloadCard);
-
-      const imageData = canvas.toDataURL("image/png");
-      
-      const link = document.createElement("a");
-      link.download = `valentine-card-${recipient || "card"}.png`;
-      link.href = imageData;
-      link.click();
-      
-      alert("Card image downloaded successfully!");
-    } catch (error) {
-      console.error("Download failed:", error);
-      alert("Failed to download image.");
-    } finally {
-      setIsGenerating(false);
-    }
+  const moveSticker = (id: number, x: number, y: number) => {
+    setStickers((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, x, y } : s))
+    );
   };
 
-  const handleDownloadPDF = async () => {
-    try {
-      setIsGenerating(true);
-      const html2canvas = (await import("html2canvas")).default;
-      const { jsPDF } = await import("jspdf");
-
-      const downloadCard = createDownloadCard();
-      document.body.appendChild(downloadCard);
-
-      const canvas = await html2canvas(downloadCard, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        logging: false,
-      });
-
-      document.body.removeChild(downloadCard);
-
-      const imageData = canvas.toDataURL("image/png");
-      
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "px",
-        format: [400, 500]
-      });
-      
-      pdf.addImage(imageData, "PNG", 0, 0, 400, 500);
-      pdf.save(`valentine-card-${recipient || "card"}.pdf`);
-      
-      alert("Card PDF downloaded successfully!");
-    } catch (error) {
-      console.error("PDF download failed:", error);
-      alert("Failed to download PDF.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
+  /* ---------------- UI ---------------- */
   return (
-    <main className="flex-grow flex flex-col items-center justify-center px-4 py-8 w-full max-w-6xl mx-auto">
+    <main className="flex flex-col items-center px-4 py-8 w-full max-w-6xl mx-auto min-h-screen">
 
+      {/* STEP 1 */}
       {step === 1 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full items-start">
+        <div className="grid lg:grid-cols-2 gap-12 w-full">
+          <div className="flex flex-col gap-6">
+            <button
+              onClick={generateRandomQuote}
+              className="px-4 py-2 bg-[#800020] text-white rounded-lg"
+            >
+              💌 Generate Love Quote
+            </button>
 
-          <div className="flex flex-col gap-8">
-
+            {/* Recipient */}
             <div>
-              <h1 className="font-display text-5xl font-bold text-gray-900 mb-3">
-                Create Your<br/>Valentine Card
-              </h1>
-              <p className="text-gray-600">
-                Craft a message straight from the heart.
+              <input
+                value={recipient}
+                onChange={(e) => {
+                  setRecipient(e.target.value);
+                  setError(null);
+                }}
+                placeholder="Enter recipient's name"
+                className="px-4 py-4 border rounded w-full"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                This name will appear on the card
               </p>
             </div>
 
-            {/* Recipient */}
-            <input
-              autoFocus
-              value={recipient}
-              onChange={(e)=>setRecipient(e.target.value)}
-              placeholder="Recipient Name"
-              className="px-4 py-4 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none"
-            />
-
             {/* Message */}
-            <div className="relative">
-
+            <div>
               <textarea
                 value={message}
-                onChange={(e)=>setMessage(e.target.value)}
-                placeholder="Personal Message"
-                maxLength={500}
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                  setError(null);
+                }}
                 rows={5}
-                className="px-4 py-4 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none resize-none"
+                placeholder="Write your heartfelt message here…"
+                className="px-4 py-4 border-2 rounded-lg resize-none w-full"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                Your message will be shown exactly as written
+              </p>
+              <p
+                className={`text-sm mt-1 ${
+                  message.length > MESSAGE_LIMIT
+                    ? "text-red-500"
+                    : "text-gray-500"
+                }`}
+              >
+                {message.length} / {MESSAGE_LIMIT} characters
+              </p>
+            </div>
 
-              {/* Emoji Button */}
+            {/* Emoji picker */}
+            <div className="relative">
               <button
-                type="button"
-                onClick={()=>setShowEmoji(!showEmoji)}
-                className="absolute bottom-3 right-3 text-xl"
+                title="Add emoji"
+                onClick={() => setShowEmoji(!showEmoji)}
+                className="text-2xl"
               >
                 😊
               </button>
 
-              {/* Emoji Picker - Simple emoji list */}
               {showEmoji && (
-                <div className="absolute z-50 right-0 mt-2 bg-white border-2 border-gray-200 rounded-lg p-2 shadow-lg">
-                  <div className="grid grid-cols-6 gap-1">
-                    {['❤️','😍','💕','💖','💗','💓','💞','💘','💝','🥰','😘','💋','🌹','🌷','💐','🌸','✨','🎁','💍','🎀','💌','🏩','👩‍❤️‍👨','👨‍❤️‍👨','👩‍❤️‍👩','💑','🤗','😻'].map((emoji)=>(
-                      <button
-                        key={emoji}
-                        type="button"
-                        onClick={()=>{
-                          setMessage(prev => prev + emoji);
-                          setShowEmoji(false);
-                        }}
-                        className="text-2xl hover:bg-gray-100 rounded p-1"
-                      >
-                        {emoji}
-                      </button>
-                    ))}
-                  </div>
+                <div className="absolute z-10 bg-white border rounded-lg p-2 shadow grid grid-cols-6 gap-2">
+                  {["❤️", "😍", "💕", "💖", "🌹", "✨", "💌"].map((e) => (
+                    <button
+                      key={e}
+                      title={`Insert ${e} emoji`}
+                      onClick={() => {
+                        setMessage((p) => p + e);
+                        setShowEmoji(false);
+                      }}
+                    >
+                      {e}
+                    </button>
+                  ))}
                 </div>
               )}
-
-              {message && (
-                <button
-                  onClick={handleClearMessage}
-                  className="mt-2 text-sm text-[#800020] hover:text-[#630019] font-semibold"
-                >
-                  ❤️ Clear Message
-                </button>
-              )}
-
-              <div className="text-right text-xs text-gray-400 mt-1">
-                {message.length} / 500 characters
-              </div>
             </div>
 
-            {/* Theme */}
-            <select
-              value={theme}
-              onChange={(e)=>setTheme(e.target.value)}
-              className="px-4 py-3 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none"
-            >
-              <option value="romantic">Romantic</option>
-              <option value="dark">Dark Love</option>
-              <option value="pastel">Pastel Dream</option>
-            </select>
+            {error && <p className="text-sm text-red-500">{error}</p>}
 
-            {/* Font */}
-            <select
-              value={font}
-              onChange={(e)=>setFont(e.target.value)}
-              className="px-4 py-3 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none"
-            >
-              <option value="serif">Serif</option>
-              <option value="sans-serif">Sans</option>
-              <option value="cursive">Cursive</option>
-              <option value="monospace">Monospace</option>
-            </select>
-
-            {/* Alignment */}
-            <div>
-              <div className="flex gap-3">
-                {["left","center","right"].map((align)=>(
-                  <button
-                    key={align}
-                    onClick={()=>setAlignment(align as "left" | "center" | "right")}
-                    className={`flex-1 py-3 rounded-lg border font-semibold capitalize transition
-                    ${alignment===align
-                      ? "bg-[#800020] text-white border-[#800020]"
-                      : "bg-white border-gray-300 text-gray-600 hover:border-[#800020]"}`}
-                  >
-                    {align}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Buttons */}
             <div className="flex gap-4">
               <button
                 onClick={handleReset}
-                className="flex-1 bg-gray-200 hover:bg-gray-300 text-black font-bold py-4 rounded-xl"
+                className="flex-1 border py-3 rounded"
               >
-                Reset
+                Reset Card
               </button>
 
-              <button 
-                onClick={() => setStep(2)}
-                disabled={!recipient || !message}
-                className="flex-1 bg-[#800020] hover:bg-[#630019] text-white font-bold py-4 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              <button
+                onClick={() => validateStepOne() && setStep(2)}
+                className="flex-1 bg-[#800020] text-white py-3 rounded"
               >
-                Next: Preview →
+                Continue →
               </button>
             </div>
-
           </div>
 
           <CardPreview
-            recipient={recipient}
-            message={message}
-            theme={theme}
-            alignment={alignment}
-            font={font}
+            {...{ recipient, message, theme, alignment, font }}
+            stickers={stickers}
+            moveSticker={moveSticker}
           />
-
         </div>
       )}
 
-      {/* STEP 2: PREVIEW */}
+      {/* STEP 2 */}
       {step === 2 && (
-        <div className="w-full max-w-4xl">
-          <div className="text-center mb-8">
-            <h2 className="font-display text-3xl font-bold text-gray-900 mb-2">
-              Preview Your Card
-            </h2>
-            <p className="text-gray-600">
-              Here&apos;s how your Valentine card will look
-            </p>
-          </div>
+<div className="w-full max-w-4xl text-center">
+  <div className="mb-8">
+    <h2 className="font-display text-3xl font-bold text-gray-900 mb-2">
+      Preview Your Card
+    </h2>
+    <p className="text-gray-600">
+      Here&apos;s how your Valentine card will look
+    </p>
+  </div>
 
-          {/* Full Card Preview */}
-          <div 
-            ref={cardRef} 
-            id="valentine-card-preview"
-            className="flex justify-center mb-8"
-          >
-            <div className="relative w-full max-w-md aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl shadow-[0_0_60px_rgba(244,63,94,0.35)]">
-              {/* Theme Gradient */}
-              <div className={`absolute inset-0 ${
-                theme === 'romantic' ? 'bg-gradient-to-br from-[#ec4899] via-[#f43f5e] to-[#800020]' :
-                theme === 'dark' ? 'bg-gradient-to-br from-[#1f2937] via-[#111827] to-[#000000]' :
-                'bg-gradient-to-br from-[#fbcfe8] via-[#e9d5ff] to-[#bfdbfe]'
-              }`} />
-              
-              {/* Dots Overlay */}
-              <div className="absolute inset-0 opacity-15" 
-                style={{
-                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
-                  backgroundSize: '20px 20px'
-                }}
-              />
+  <CardPreview
+    {...{ recipient, message, theme, alignment, font }}
+    stickers={stickers}
+    moveSticker={moveSticker}
+  />
 
-              {/* Card Content */}
-              <div className={`absolute inset-0 flex flex-col justify-center text-white px-10 py-12 ${
-                alignment === 'left' ? 'text-left items-start' :
-                alignment === 'right' ? 'text-right items-end' :
-                'text-center items-center'
-              }`}>
-                <div className="mb-6 text-4xl animate-bounce">❤️</div>
-                
-                <h2 className="font-serif text-4xl font-bold leading-snug mb-6">
-                  Dear{" "}
-                  <span className="italic underline decoration-rose-200 underline-offset-4">
-                    {recipient}
-                  </span>
-                  ,
-                </h2>
+  {/* Decorative Wax Seal Download */}
+  <div className="flex justify-center mt-8 mb-10">
+    <CardDownloadButton
+      cardElementId="valentine-card-preview"
+      cardTitle={`valentine-card-${recipient || "card"}`}
+    />
+  </div>
 
-                <p className="text-lg opacity-95 leading-relaxed max-w-sm mb-8">
-                  {message}
-                </p>
-
-                <div className="italic text-xl opacity-95">
-                  With Love ✨
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Decorative Wax Seal Download */}
-          <div className="flex justify-center mb-10">
-            <CardDownloadButton
-              cardElementId="valentine-card-preview"
-              cardTitle={`valentine-card-${recipient || "card"}`}
-            />
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+  {/* Action Buttons */}
+  <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => setStep(1)}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-xl transition"
+              className="flex items-center gap-2 border px-6 py-3"
             >
-              <ArrowLeft className="w-5 h-5" />
-              Edit Card
-            </button>
-
-            <button
-              onClick={handleDownloadImage}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-white border-2 border-[#800020] text-[#800020] hover:bg-[#800020] hover:text-white font-semibold rounded-xl transition"
-            >
-              <Download className="w-5 h-5" />
-              Download Image
-            </button>
-
-            <button
-              onClick={handleDownloadPDF}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-white border-2 border-[#800020] text-[#800020] hover:bg-[#800020] hover:text-white font-semibold rounded-xl transition"
-            >
-              <FileText className="w-5 h-5" />
-              Download PDF
+              <ArrowLeft />
+              Back
             </button>
 
             <button
               onClick={() => setStep(3)}
-              className="flex items-center justify-center gap-2 px-8 py-3 bg-[#800020] hover:bg-[#630019] text-white font-bold rounded-xl shadow-lg transition"
+              className="flex items-center gap-2 bg-[#800020] text-white px-6 py-3"
             >
+              <Send />
               Send Card
-              <Send className="w-5 h-5" />
             </button>
           </div>
         </div>
       )}
 
-      {/* STEP 3: SEND */}
+      {/* STEP 3 */}
       {step === 3 && (
-        <div className="w-full max-w-4xl">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-[#800020] rounded-full mb-4">
-              <Heart className="w-8 h-8 text-white animate-pulse" />
-            </div>
-            <h2 className="font-display text-3xl font-bold text-gray-900 mb-2">
-              Send Your Card
-            </h2>
-            <p className="text-gray-600">
-              Choose how you want to deliver your heartfelt message
-            </p>
-          </div>
+        <div className="text-center max-w-xl">
+          <Heart className="mx-auto w-12 h-12 text-[#800020] mb-4 animate-pulse" />
 
-          {/* Send Options */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Email Option */}
+          <h2 className="text-3xl font-bold mb-2">Send Your Card</h2>
+          <p className="mb-8 text-gray-600">Choose how to share it</p>
+
+          <div className="grid grid-cols-2 gap-4">
             <button
-              onClick={handleEmail}
-              className="flex items-center gap-4 p-6 bg-white border-2 border-gray-200 hover:border-[#800020] rounded-2xl transition group text-left"
+              disabled={!message.trim()}
+              title={!message.trim() ? "Add a message to enable WhatsApp sharing" : ""}
+              className="border p-6 rounded disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <div className="flex items-center justify-center w-14 h-14 bg-red-50 rounded-xl group-hover:bg-[#800020] transition">
-                <Mail className="w-7 h-7 text-red-500 group-hover:text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 text-lg">Email</h3>
-                <p className="text-gray-500 text-sm">Send via email client</p>
-              </div>
+              💬 WhatsApp
             </button>
 
-            {/* WhatsApp Option */}
             <button
-              onClick={handleWhatsApp}
-              disabled={isGenerating}
-              className="flex items-center gap-4 p-6 bg-white border-2 border-gray-200 hover:border-[#25D366] rounded-2xl transition group text-left disabled:opacity-50"
+              disabled={!message.trim()}
+              title={!message.trim() ? "Write a message to share on Twitter" : ""}
+              className="border p-6 rounded disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <div className="flex items-center justify-center w-14 h-14 bg-green-50 rounded-xl group-hover:bg-[#25D366] transition">
-                <MessageCircle className="w-7 h-7 text-green-500 group-hover:text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 text-lg">WhatsApp</h3>
-                <p className="text-gray-500 text-sm">Share via WhatsApp</p>
-              </div>
+              🐦 Twitter (X)
             </button>
 
-            {/* Copy to Clipboard Option */}
             <button
               onClick={handleCopyLink}
-              disabled={isGenerating}
-              className="flex items-center gap-4 p-6 bg-white border-2 border-gray-200 hover:border-[#800020] rounded-2xl transition group text-left disabled:opacity-50"
+              className="flex items-center gap-2 border p-6 rounded"
             >
-              <div className="flex items-center justify-center w-14 h-14 bg-pink-50 rounded-xl group-hover:bg-[#800020] transition">
-                {showCopied ? (
-                  <Check className="w-7 h-7 text-green-500" />
-                ) : (
-                  <Copy className="w-7 h-7 text-pink-500 group-hover:text-white" />
-                )}
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 text-lg">
-                  {showCopied ? "Copied!" : "Copy Image"}
-                </h3>
-                <p className="text-gray-500 text-sm">
-                  {showCopied ? "Card copied to clipboard" : "Copy to paste anywhere"}
-                </p>
-              </div>
+              {showCopied ? <Check /> : <Copy />}
+              {showCopied ? "Copied!" : "Copy Share Link"}
             </button>
 
-            {/* Download Option */}
-            <button
-              onClick={handleDownloadImage}
-              className="flex items-center gap-4 p-6 bg-white border-2 border-gray-200 hover:border-[#800020] rounded-2xl transition group text-left"
-            >
-              <div className="flex items-center justify-center w-14 h-14 bg-purple-50 rounded-xl group-hover:bg-[#800020] transition">
-                <Download className="w-7 h-7 text-purple-500 group-hover:text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 text-lg">Download</h3>
-                <p className="text-gray-500 text-sm">Save as image file</p>
-              </div>
+            <button className="flex items-center gap-2 border p-6 rounded">
+              <Mail />
+              Email
+            </button>
+
+            <button className="flex items-center gap-2 border p-6 rounded">
+              <Download />
+              PNG
+            </button>
+
+            <button className="flex items-center gap-2 border p-6 rounded">
+              <FileText />
+              PDF
             </button>
           </div>
 
-          {/* Card Preview Mini */}
-          <div className="mb-8">
-            <p className="text-center text-sm text-gray-500 mb-4">Your card</p>
-            <div className="flex justify-center">
-              <div className="w-48 aspect-[4/5] rounded-xl overflow-hidden shadow-lg">
-                <div className={`w-full h-full ${
-                  theme === 'romantic' ? 'bg-gradient-to-br from-[#ec4899] via-[#f43f5e] to-[#800020]' :
-                  theme === 'dark' ? 'bg-gradient-to-br from-[#1f2937] via-[#111827] to-[#000000]' :
-                  'bg-gradient-to-br from-[#fbcfe8] via-[#e9d5ff] to-[#bfdbfe]'
-                }`} />
-              </div>
-            </div>
-          </div>
-
-          {/* Back Button */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => setStep(2)}
-              className="flex items-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-xl transition"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              Back to Preview
-            </button>
-          </div>
+          <button onClick={() => setStep(2)} className="mt-8 underline">
+            ← Back
+          </button>
         </div>
       )}
     </main>
   );
 }
-
-function Step({ number, label, active }: { number: number; label: string; active: boolean }){
-  return(
+function Step({
+  number,
+  label,
+  active,
+}: {
+  number: number;
+  label: string;
+  active: boolean;
+}) {
+  return (
     <div className="flex flex-col items-center gap-2 bg-white/80 backdrop-blur-sm px-3 py-2 rounded-lg">
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center
-      ${active ? "bg-[#800020] text-white" : "bg-gray-200 text-gray-500"}`}>
+      <div
+        className={`w-8 h-8 rounded-full flex items-center justify-center
+        ${active ? "bg-[#800020] text-white" : "bg-gray-200 text-gray-500"}`}
+      >
         {number}
       </div>
-      <span className={`${active ? "text-[#800020] font-bold" : "text-gray-600"}`}>
+      <span
+        className={`${
+          active ? "text-[#800020] font-bold" : "text-gray-600"
+        }`}
+      >
         {label}
       </span>
     </div>
   );
 }
+
