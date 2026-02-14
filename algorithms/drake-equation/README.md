@@ -50,7 +50,7 @@ G = N × fw × fA × fU × fB × fP × fR × fS
 ## Usage Example
 
 ```typescript
-import { calculatePotentialPartners, LOCATIONS, AGE_RANGES } from '@/algorithms/drake-equation';
+import { calculatePotentialPartners, LOCATIONS, AGE_RANGES, EDUCATION_LEVELS, ATTRACTIVENESS_LEVELS, PERSONALITY_TAGS, RECIPROCITY_LEVELS } from '@/algorithms/drake-equation';
 
 const result = calculatePotentialPartners({
   location: LOCATIONS['hong-kong'],
@@ -64,8 +64,6 @@ const result = calculatePotentialPartners({
 
 console.log(result.finalNumber); // ~26 potential matches
 console.log(result.steps);       // Detailed breakdown
-
-
 Mathematical Notes: 
 
 Geometric Mean for Personality: Using geometric mean (not arithmetic) prevents "requirement inflation" when selecting multiple traits.

@@ -15,7 +15,6 @@
  * Space Complexity: O(1) - Fixed amount of memory used for calculations
  * 
  * @author Your Name
- * @date 2024
  */
 
 import { 
@@ -92,7 +91,7 @@ export function calculatePotentialPartners(input: DrakeInput): DrakeResult {
     finalNumber: Math.round(G),
     exactNumber: G,
     steps,
-    formula: 'G = N × fw × fA × fU × fB × fP × fR × fS',
+    formula: 'G = N × fw × fL × fA × fU × fB × fP × fR × fS',
     input
   };
 }
