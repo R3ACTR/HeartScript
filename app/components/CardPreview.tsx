@@ -24,8 +24,8 @@ export default function CardPreview({ recipient, message, theme }: Props) {
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-16 right-16 w-64 h-64 bg-pink-200 rounded-full blur-3xl opacity-30 animate-pulse" />
         <div
-          className="absolute bottom-16 left-16 w-64 h-64 bg-rose-200 rounded-full blur-3xl opacity-30 animate-pulse"
-          style={{ animationDelay: "2s" }}
+          className="absolute bottom-16 left-16 w-64 h-64 bg-rose-200 rounded-full blur-3xl opacity-30 animate-pulse [animation-delay:2s]"
+          
         />
       </div>
 
@@ -43,15 +43,8 @@ export default function CardPreview({ recipient, message, theme }: Props) {
           {/* gradient theme */}
           <div className={`absolute inset-0 ${themeStyles[theme]}`} />
 
-          {/* dots overlay */}
-          <div
-            className="absolute inset-0 opacity-15"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle, rgba(255,255,255,0.7) 2px, transparent 2.5px)",
-              backgroundSize: "30px 30px",
-            }}
-          />
+         {/* dots overlay */}
+<div className="absolute inset-0 opacity-15 dots-overlay" />
 
           {/* content */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-8 py-10">

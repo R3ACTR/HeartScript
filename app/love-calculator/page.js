@@ -37,7 +37,7 @@ export default function LoveCalculator() {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
+    <div className="text-center mt-12">
       <h1>Love Compatibility Calculator 💘</h1>
 
       <input

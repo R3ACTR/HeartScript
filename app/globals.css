@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
 
 .font-display {
   font-family: 'Playfair Display', serif;
@@ -9,21 +8,20 @@
   font-family: 'Lato', sans-serif;
 }
 
-
 :root {
   --background: #ffffff;
-  --foreground: #640d14; /* Dark Red/Burgundy */
-  --primary: #e11d48; /* Rose 600 */
+  --foreground: #640d14;
+  --primary: #e11d48;
   --primary-foreground: #ffffff;
-  --secondary: #ffe4e6; /* Rose 100 */
-  --secondary-foreground: #881337; /* Rose 900 */
-  --muted: #fff1f2; /* Rose 50 */
-  --muted-foreground: #be123c; /* Rose 700 */
-  --accent: #fbcfe8; /* Pink 200 */
-  --accent-foreground: #831843; /* Pink 900 */
+  --secondary: #ffe4e6;
+  --secondary-foreground: #881337;
+  --muted: #fff1f2;
+  --muted-foreground: #be123c;
+  --accent: #fbcfe8;
+  --accent-foreground: #831843;
   --card: #ffffff;
   --card-foreground: #640d14;
-  --border: #fecdd3; /* Rose 200 */
+  --border: #fecdd3;
   --input: #fff1f2;
   --ring: #e11d48;
 }
@@ -56,8 +54,7 @@ body {
 }
 
 @keyframes pulse-slow {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -107,4 +104,12 @@ body {
 
 .animate-heartbeat {
   animation: heartbeat 2s infinite;
+}
+.dots-overlay {
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.7) 2px,
+    transparent 2.5px
+  );
+  background-size: 30px 30px;
 }
