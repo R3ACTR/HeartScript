@@ -32,6 +32,7 @@ const [showCopied,setShowCopied]=useState(false);
 const [showSocialCopied,setShowSocialCopied]=useState(false);
 const [showSaved,setShowSaved]=useState(false);
 const [showEmoji,setShowEmoji]=useState(false);
+const [showMsgCopied,setShowMsgCopied]=useState(false);
 
 /* AUDIO */
 const [audioBlob,setAudioBlob]=useState<Blob|null>(null);
@@ -63,6 +64,15 @@ useEffect(()=>{
 const draft={recipient,message,theme,alignment,font,stickers,audioURL};
 localStorage.setItem("cardDraft",JSON.stringify(draft));
 },[recipient,message,theme,alignment,font,stickers,audioURL]);
+
+/* ---------------- COPY MESSAGE ---------------- */
+
+const handleCopyMessage = async () => {
+if(!message.trim()) return;
+await navigator.clipboard.writeText(message);
+setShowMsgCopied(true);
+setTimeout(()=>setShowMsgCopied(false),2000);
+};
 
 /* ---------------- MANUAL SAVE ---------------- */
 
@@ -185,9 +195,11 @@ setShowSocialCopied(true);
 setTimeout(()=>setShowSocialCopied(false),2000);
 };
 
-const handleNativeShare=async()=>{
-if(!navigator.share)return;
-await navigator.share({
+/* ✅ FIXED SHARE FUNCTION */
+const handleNativeShare = async (): Promise<void> => {
+if (typeof navigator === "undefined" || !("share" in navigator)) return;
+
+await (navigator as Navigator & { share: Function }).share({
 title:"Valentine Card 💖",
 text:`Dear ${recipient}\n\n${message}`
 });
@@ -317,6 +329,14 @@ className="px-4 py-4 border rounded"/>
 rows={5} placeholder="Message"
 className="px-4 py-4 border rounded"/>
 
+<button
+onClick={handleCopyMessage}
+className="flex items-center justify-center gap-2 border py-2 rounded hover:bg-gray-100 transition"
+>
+{showMsgCopied ? <Check size={18}/> : <Copy size={18}/>}
+{showMsgCopied ? "Copied!" : "Copy Message"}
+</button>
+
 {/* AUDIO */}
 <div className="border p-4 rounded-xl">
 <div className="flex gap-3">
@@ -417,7 +437,7 @@ Send <Send/>
 {showSocialCopied?"Copied!":"Instagram"}
 </button>
 
-{navigator.share&&(
+{typeof navigator !== "undefined" && "share" in navigator && (
 <button onClick={handleNativeShare} className="border p-6 rounded">Share</button>
 )}
 
