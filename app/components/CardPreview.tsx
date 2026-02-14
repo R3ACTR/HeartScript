@@ -4,32 +4,33 @@ interface Props {
   recipient: string;
   message: string;
   theme: string;
-  alignment?: "left" | "center" | "right";
+  alignment: "left" | "center" | "right";
+  font: string;
 }
 
 export default function CardPreview({
   recipient,
   message,
   theme,
-  alignment = "center",
+  alignment,
+  font
 }: Props) {
-  const themeStyles: Record<string, string> = {
-    romantic:
-      "bg-gradient-to-br from-[#ec4899] via-[#f43f5e] to-[#800020]",
-    dark:
-      "bg-gradient-to-br from-[#1f2937] via-[#111827] to-[#000000]",
-    pastel:
-      "bg-gradient-to-br from-[#fbcfe8] via-[#e9d5ff] to-[#bfdbfe]",
+
+  const themeStyles: Record<string,string> = {
+    romantic:"bg-gradient-to-br from-pink-500 via-rose-500 to-[#800020]",
+    dark:"bg-gradient-to-br from-gray-800 via-gray-900 to-black",
+    pastel:"bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200"
   };
 
-  const alignmentClasses: Record<string, string> = {
-    left: "text-left items-start",
-    center: "text-center items-center",
-    right: "text-right items-end",
+  const alignmentClasses = {
+    left:"items-start text-left",
+    center:"items-center text-center",
+    right:"items-end text-right"
   };
 
   return (
     <div className="relative flex items-center justify-center min-h-[520px] w-full">
+
       {/* background blur blobs */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-16 right-16 w-64 h-64 bg-pink-200 rounded-full blur-3xl opacity-30 animate-pulse" />
@@ -68,6 +69,7 @@ export default function CardPreview({
           <div
             className={`absolute inset-0 flex flex-col justify-center text-white px-8 py-10 ${alignmentClasses[alignment]}`}
           >
+
             {/* heart */}
             <div className="mb-5 text-3xl animate-bounce">❤️</div>
 
@@ -81,15 +83,16 @@ export default function CardPreview({
             </h2>
 
             {/* message */}
-            <p className="mt-5 text-base opacity-95 leading-relaxed max-w-xs">
+            <p
+              style={{ fontFamily: font }}   // ✅ YOUR FEATURE APPLIED HERE
+              className="mt-5 text-base opacity-95 leading-relaxed max-w-xs"
+            >
               {message ||
                 "Your beautiful message will appear here... Type in the box to see the magic happen."}
             </p>
 
-            {/* footer */}
-            <div className="mt-8 italic text-lg opacity-95">
-              With Love ✨
-            </div>
+            <div className="italic text-xl mt-6">With Love ✨</div>
+
           </div>
         </div>
       </div>
