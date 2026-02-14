@@ -302,14 +302,14 @@ export default function FlamesPage() {
 
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-pink-50 p-4 rounded-2xl text-center">
-            <div className="text-3xl font-bold text-pink-600">{calculation.remainingCount}</div>
-            <div className="text-xs font-semibold text-pink-400 uppercase mt-1">Remaining Letters</div>
+            <div className="text-3xl font-bold text-[#FFAAB8]">{calculation.remainingCount}</div>
+            <div className="text-xs font-semibold text-[#F39EB6] uppercase mt-1">Remaining Letters</div>
           </div>
           <div className="bg-pink-50 p-4 rounded-2xl text-center">
-            <div className="text-3xl font-bold text-pink-600 flex items-center justify-center gap-1">
+            <div className="text-3xl font-bold text-[#FFAAB8] flex items-center justify-center gap-1">
               {elapsed}<span className="text-sm">s</span>
             </div>
-            <div className="text-xs font-semibold text-pink-400 uppercase mt-1 flex items-center justify-center gap-1">
+            <div className="text-xs font-semibold text-[#F39EB6] uppercase mt-1 flex items-center justify-center gap-1">
               <Clock size={12} /> Time Taken
             </div>
           </div>
@@ -317,7 +317,7 @@ export default function FlamesPage() {
 
         <button
           onClick={resetGame}
-          className="w-full py-4 bg-white border-2 border-pink-200 text-pink-600 rounded-2xl font-bold hover:bg-pink-50 hover:border-pink-300 transition-colors flex items-center justify-center gap-2"
+          className="w-full py-4 bg-[#FFAAB8] border-2 border-[#FFD8DF] text-white rounded-2xl font-bold hover:text-[#FFAAB8] hover:bg-white hover:[#FFD8DF] transition-colors flex items-center justify-center gap-2"
         >
           <RefreshCw className="w-5 h-5" />
           <span>Try Another Couple</span>
