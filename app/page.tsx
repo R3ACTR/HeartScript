@@ -10,6 +10,7 @@ import { useState, useRef, useEffect } from "react";
 export default function Home() {
   const router = useRouter();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Try to autoplay when component mounts
@@ -131,6 +132,10 @@ export default function Home() {
 }
 
   ];
+const filteredAlgorithms = algorithms.filter(algo =>
+  algo.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  algo.description.toLowerCase().includes(searchQuery.toLowerCase())
+);
 
   return (
     <main className="min-h-screen bg-transparent relative overflow-hidden">
@@ -229,10 +234,24 @@ export default function Home() {
             Explore our collection of romantic algorithms and tools to celebrate love
           </p>
         </motion.div>
+{/* Search Bar */}
+<div className="max-w-2xl mx-auto mb-10">
+  <div className="relative">
+    <input
+      type="text"
+      placeholder="Search algorithms..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="w-full px-5 py-3 rounded-full border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 text-pink-700 placeholder-pink-300 shadow-sm"
+    />
+    <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-pink-400" />
+  </div>
+</div>
 
         {/* Algorithm Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {algorithms.map((algo, index) => (
+         {filteredAlgorithms.map((algo, index) => (
+
             <motion.div
               key={algo.id}
               initial={{ opacity: 0, y: 20 }}
@@ -265,6 +284,11 @@ export default function Home() {
                   className="w-20 h-20 object-contain drop-shadow-md"
                 />
               </div>
+{filteredAlgorithms.length === 0 && (
+  <p className="text-center text-pink-400 mt-6">
+    No algorithms found 💔
+  </p>
+)}
 
 
 
