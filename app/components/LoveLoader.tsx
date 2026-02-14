@@ -31,25 +31,31 @@ export default function LoveLoader() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-pink-50 to-red-100 text-center px-6">
-      <div className="text-6xl text-red-500 animate-bounce">
-        ❤️
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#FF8FB7] via-white to-[#F6B1CE] text-center px-6">
+      
+      {/* Heart image instead of emoji */}
+      <img
+        src="/heart.webp"
+        alt="heart"
+        className="w-20 h-20 animate-bounce drop-shadow-lg"
+      />
 
-      <p className="mt-6 text-xl font-semibold text-gray-700 animate-pulse">
+      <p className="mt-6 text-xl font-semibold text-[#F57799] animate-pulse">
         Calculating your love destiny...
       </p>
 
+      {/* Progress bar */}
       <div className="w-64 bg-white rounded-full h-4 mt-6 overflow-hidden shadow">
         <div
-          className="bg-red-500 h-4 transition-all duration-100"
+          className="bg-gradient-to-r from-pink-300 to-pink-500 h-4 transition-all duration-100"
           style={{ width: `${progress}%` }}
         ></div>
       </div>
 
-      <p className="mt-2 text-sm text-gray-600">{progress}%</p>
+      <p className="mt-2 text-sm text-pink-500">{progress}%</p>
 
-      <p className="mt-6 text-md italic text-gray-600 max-w-md">
+      {/* Quote */}
+      <p className="mt-6 text-md italic text-pink-500 max-w-md">
         "{quote}"
       </p>
     </div>

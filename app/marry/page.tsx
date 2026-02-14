@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { generateMDate } from "@/algorithms/marriageEstimator";
+import FloatingHearts from "../algorithms/flames/FloatingHearts";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 export default function DestinedMarryPage() {
   const [date1, setDate1] = useState("");
@@ -12,9 +15,8 @@ export default function DestinedMarryPage() {
 
   const todayStr = new Date().toISOString().split("T")[0];
 
-  //ensure age ≥ 15
   const minBirthday = new Date();
-  minBirthday.setFullYear(minBirthday.getFullYear() - 100); // allow max age 100
+  minBirthday.setFullYear(minBirthday.getFullYear() - 100);
   const minBirthdayStr = minBirthday.toISOString().split("T")[0];
 
   function handleEstimate() {
@@ -24,21 +26,19 @@ export default function DestinedMarryPage() {
     const meet = new Date(date3);
     const fight = new Date(date4);
 
-    // Basic validations
     if (!date1 || !date2 || !date3 || !date4) {
       setResult("Please fill in all dates.");
       return;
     }
 
-    // Birthdays must be at least 15 years ago
     const minAllowed = new Date();
     minAllowed.setFullYear(minAllowed.getFullYear() - 15);
+
     if (b1 > minAllowed || b2 > minAllowed) {
       setResult("Both birthdays must be at least 15 years ago.");
       return;
     }
 
-    // No date in future
     if (b1 > now || b2 > now || meet > now || fight > now) {
       setResult("Dates cannot be in the future.");
       return;
@@ -49,127 +49,118 @@ export default function DestinedMarryPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="max-w-md w-full space-y-6 bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10">
+    <div className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-pink-50 via-white to-pink-100 flex items-center justify-center">
+      
+      <FloatingHearts />
 
-        <h1 className="text-2xl font-bold text-center">
-          Find your{" "}
-          <span className="text-red-500 font-normal italic font-serif">
-            Destined
-          </span>{" "}
-          Marriage Date
-        </h1>
+      <div className="w-full max-w-md bg-white/95 backdrop-blur-xl p-8 lg:p-10 rounded-3xl shadow-2xl border border-pink-100 transition-all duration-300 hover:scale-[1.01] z-10">
 
+        {/* Header */}
+        <div className="text-center mb-6">
+          <img
+            src="/heart.webp"
+            alt="heart"
+            className="w-14 h-14 mx-auto mb-3 animate-heartbeat drop-shadow-lg"
+          />
+
+          <h1 className="text-3xl font-bold text-[#F57799]">
+            Destined Marriage Date
+          </h1>
+          <p className="text-pink-400 mt-1">
+            Discover when your paths unite forever
+          </p>
+        </div>
+
+        {/* Inputs */}
         <div className="grid grid-cols-2 gap-4">
-          {/* Date 1 */}
+
           <div>
-            <p className="text-sm mb-1">Your Birthday</p>
+            <p className="text-sm mb-1 text-pink-500">Your Birthday</p>
             <input
               type="date"
               value={date1}
               max={todayStr}
               min={minBirthdayStr}
               onChange={(e) => setDate1(e.target.value)}
-              className="w-full p-3 rounded-lg bg-black/30 border border-white/10 outline-none"
+              className="w-full px-4 py-3 rounded-2xl bg-pink-50 border border-pink-200 
+              focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none text-gray-700"
             />
           </div>
 
-          {/* Date 2 */}
           <div>
-            <p className="text-sm mb-1">Partner's Birthday</p>
+            <p className="text-sm mb-1 text-pink-500">Partner's Birthday</p>
             <input
               type="date"
               value={date2}
               max={todayStr}
               min={minBirthdayStr}
               onChange={(e) => setDate2(e.target.value)}
-              className="w-full p-3 rounded-lg bg-black/30 border border-white/10 outline-none"
+              className="w-full px-4 py-3 rounded-2xl text-[#FF8FB7] bg-pink-50 border border-pink-200 
+              focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none text-gray-700"
             />
           </div>
 
-          {/* Date 3 */}
           <div>
-            <p className="text-sm mb-1">Day You Met</p>
+            <p className="text-sm mb-1 text-pink-500">Day You Met</p>
             <input
               type="date"
               value={date3}
               max={todayStr}
               onChange={(e) => setDate3(e.target.value)}
-              className="w-full p-3 rounded-lg bg-black/30 border border-white/10 outline-none"
+              className="w-full px-4 py-3 rounded-2xl bg-pink-50 border border-pink-200 
+              focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none text-gray-700"
             />
           </div>
 
-          {/* Date 4 */}
           <div>
-            <p className="text-sm mb-1">First Fight</p>
+            <p className="text-sm mb-1 text-pink-500">First Fight</p>
             <input
               type="date"
               value={date4}
               max={todayStr}
               onChange={(e) => setDate4(e.target.value)}
-              className="w-full p-3 rounded-lg bg-black/30 border border-white/10 outline-none"
+              className="w-full px-4 py-3 rounded-2xl bg-pink-50 border border-pink-200 
+              focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none text-gray-700"
             />
           </div>
         </div>
 
-        <button
+        {/* Button */}
+        <motion.button
           onClick={handleEstimate}
-          className="w-full p-3 rounded-lg bg-pink-500 hover:bg-pink-600 transition"
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full py-4 mt-6 bg-gradient-to-r from-pink-300 to-pink-500 
+          hover:from-pink-300 hover:to-pink-500 text-white rounded-2xl font-bold 
+          shadow-lg hover:shadow-xl hover:shadow-pink-200/50 
+          transition-all duration-300 flex items-center justify-center gap-2 group"
         >
-          Find Out
-        </button>
+          <span className="tracking-wide">Find Destiny</span>
+          <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+        </motion.button>
 
-        {/* Result with Heart Animation */}
-        {result && (
-          <div className="text-center mt-6 relative">
-            <p className="text-sm opacity-70">
-              This relationship grows naturally toward marriage...
-            </p>
+        {/* Result */}
+        <AnimatePresence>
+          {result && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="text-center mt-6"
+            >
+              <p className="text-sm text-pink-500">
+                This relationship grows naturally toward marriage...
+              </p>
 
-            <p className="text-xl font-bold text-pink-400 mt-2 animate-popHeart">
-              {result}
-            </p>
-
-            {/* Heart popping effect */}
-            <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-              {[...Array(5)].map((_, i) => (
-                <span
-                  key={i}
-                  className={`absolute text-pink-400 text-2xl animate-heartPop delay-${i * 200}`}
-                  style={{
-                    left: `${20 + i * 15}%`,
-                  }}
-                >
-                  ❤️
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
+              <p className="text-3xl font-bold text-pink-600 mt-2 drop-shadow-sm">
+                {result}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* Custom animations */}
-      <style jsx>{`
-        @keyframes popHeart {
-          0% { transform: scale(0); opacity: 0; }
-          50% { transform: scale(1.5); opacity: 1; }
-          100% { transform: scale(1) translateY(-40px); opacity: 0; }
-        }
-
-        .animate-heartPop {
-          animation: popHeart 1s ease forwards;
-        }
-
-        .animate-popHeart {
-          animation: popHeart 1s ease;
-        }
-
-        .delay-0 { animation-delay: 0s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-400 { animation-delay: 0.4s; }
-        .delay-600 { animation-delay: 0.6s; }
-        .delay-800 { animation-delay: 0.8s; }
-      `}</style>
+      
     </div>
   );
 }
