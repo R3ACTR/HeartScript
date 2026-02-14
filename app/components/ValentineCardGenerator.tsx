@@ -328,12 +328,14 @@ className="px-4 py-2 bg-[#800020] text-white rounded-lg">
 </button>
 
 <input value={recipient} onChange={e=>setRecipient(e.target.value)}
-placeholder="Recipient Name"
+
+placeholder="Enter recipient's name"
+
 className="px-4 py-4 border rounded"/>
 
 <textarea value={message} onChange={e=>setMessage(e.target.value)}
 rows={5}
-placeholder="Your Message"
+ placeholder="Write your heartfelt message here…"
 className="px-4 py-4 border-2 rounded-lg resize-none"/>
 <p
   className={`text-sm mt-1 ${
