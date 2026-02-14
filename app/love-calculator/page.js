@@ -28,6 +28,7 @@ export default function LoveCalculator() {
         <input
           type="text"
           placeholder="Enter first name"
+          value={name1}
           onChange={(e) => setName1(e.target.value)}
           className="w-full border rounded p-2 mb-4"
         />
@@ -35,6 +36,7 @@ export default function LoveCalculator() {
         <input
           type="text"
           placeholder="Enter second name"
+          value={name2}
           onChange={(e) => setName2(e.target.value)}
           className="w-full border rounded p-2 mb-4"
         />
