@@ -108,7 +108,8 @@ export default function ValentineCardGenerator() {
           <div className="flex flex-col gap-6">
             <button
               onClick={generateRandomQuote}
-              className="px-4 py-2 bg-[#800020] text-white rounded-lg"
+              className="px-4 py-2 bg-[#800020] text-white rounded-lg transition-all duration-300 hover:bg-[#6b001b] hover:shadow-md active:scale-95"
+
             >
               💌 Generate Love Quote
             </button>
@@ -160,14 +161,16 @@ export default function ValentineCardGenerator() {
             <div className="flex gap-4">
               <button
                 onClick={handleReset}
-                className="flex-1 border py-3 rounded"
+               className="flex-1 border py-3 rounded transition-all duration-300 hover:bg-gray-100 hover:shadow-sm active:scale-95"
+
               >
                 Reset Card
               </button>
 
               <button
                 onClick={() => validateStepOne() && setStep(2)}
-                className="flex-1 bg-[#800020] text-white py-3 rounded"
+               className="flex-1 bg-[#800020] text-white py-3 rounded transition-all duration-300 hover:bg-[#6b001b] hover:shadow-md active:scale-95"
+
               >
                 Continue →
               </button>
