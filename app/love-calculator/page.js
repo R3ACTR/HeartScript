@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import loveScore from "@/algorithms/loveScore";
+import { motion, AnimatePresence } from "framer-motion";
 
 /*
 Love Compatibility Calculator
@@ -116,14 +117,64 @@ export default function LoveCalculator() {
 
       <br /><br />
 
-      <button onClick={calculateLove}>Calculate Love</button>
+      {/* Animated Calculate Button */}
+      <motion.button
+        onClick={calculateLove}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.92 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        style={{
+          background: "#ff4d88",
+          color: "white",
+          border: "none",
+          padding: "10px 22px",
+          borderRadius: "10px",
+          cursor: "pointer",
+          fontWeight: "600",
+          fontSize: "16px"
+        }}
+      >
+        💘 Calculate Love
+      </motion.button>
 
-      {result !== null && (
-        <div>
-          <h2>{result}% Compatible</h2>
-          <p>{getMessage(result)}</p>
-        </div>
-      )}
+      {/* 🌸 BEAUTIFUL RESULT ANIMATION */}
+      <AnimatePresence>
+        {result !== null && (
+          <motion.div
+            key="love-result"
+            initial={{ opacity: 0, scale: 0.7, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{
+              type: "spring",
+              stiffness: 120,
+              damping: 12
+            }}
+            style={{ marginTop: "20px" }}
+          >
+            <motion.h2
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.1, type: "spring" }}
+              style={{
+                fontSize: "28px",
+                fontWeight: "bold"
+              }}
+            >
+              💘 {result}% Compatible
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.25 }}
+              style={{ fontSize: "18px" }}
+            >
+              {getMessage(result)}
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Explanation Section */}
       <hr style={{ margin: "40px 0" }} />
