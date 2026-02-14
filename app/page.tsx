@@ -242,21 +242,16 @@ export default function Home() {
                 <div className="relative p-8">
                   
                   {/* Icon */}
-              <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
-                <img
-                  src={
-                    algo.id === "love-calculator"
-                      ? "/calc.webp"
-                      : algo.id === "flames"
-                      ? "/flames.webp"
-                      : algo.id === "nickname-generator"
-                      ? "/nickname.webp"
-                      : "/val-card.webp"
-                  }
-                  alt={algo.title}
-                  className="w-20 h-20 object-contain drop-shadow-md"
-                />
-              </div>
+              {/* Icon */}
+<div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+  {(() => {
+    const Icon = algo.icon;
+    return (
+      <Icon className="w-16 h-16 text-pink-500 drop-shadow-md" />
+    );
+  })()}
+</div>
+
 
 
 
