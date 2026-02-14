@@ -123,7 +123,16 @@ export default function Home() {
       icon: Smile,
       color: "from-pink-500 to-rose-500",
       path: "/pickup-lines",
-    }
+    },
+    {
+  id: "lovers-board",
+  title: "Lovers Board",
+  description: "Post and read anonymous romantic confessions on a vintage notice board",
+  icon: MessageCircle,
+  color: "from-rose-500 to-pink-500",
+  path: "/lovers-board",
+}
+
   ];
 
   const filteredAlgorithms = algorithms.filter(algo =>
