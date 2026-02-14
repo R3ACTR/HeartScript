@@ -1,10 +1,11 @@
 "use client";
 
-import { Heart, Calculator, Flame, MessageCircle, Sparkles, PenTool, Rose, Search, Music2, VolumeX, Smile } from "lucide-react";
+import { Heart,Target, Calculator, Flame, MessageCircle, Sparkles, PenTool, Rose, Search, Music2, VolumeX, Smile } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import FloatingHearts from "./algorithms/flames/FloatingHearts";
 import { useState, useRef, useEffect } from "react";
+
 
 export default function Home() {
   const router = useRouter();
@@ -131,7 +132,16 @@ export default function Home() {
   icon: MessageCircle,
   color: "from-rose-500 to-pink-500",
   path: "/lovers-board",
+},
+{
+  id: "catch-the-heart",
+  title: "Catch the Heart",
+  description: "Move your cursor and catch falling hearts to score points!",
+  icon: Target,
+  color: "from-pink-500 to-rose-500",
+  path: "/catch-the-heart",
 }
+
 
   ];
 
