@@ -127,7 +127,16 @@ export default function ValentineCardGenerator() {
 
   /* ---------------- UI ---------------- */
   return (
-<main className="flex flex-col items-center px-4 py-6 sm:py-8 w-full max-w-6xl mx-auto min-h-screen overflow-x-hidden">
+<main
+  className={`flex flex-col items-center px-4 py-6 sm:py-8 w-full max-w-6xl mx-auto min-h-screen overflow-x-hidden transition-all duration-700 ${
+    theme === "romantic"
+      ? "bg-gradient-to-r from-pink-200 via-rose-200 to-pink-300 animate-pulse"
+      : theme === "cute"
+      ? "bg-gradient-to-r from-purple-200 via-pink-200 to-purple-300 animate-pulse"
+      : "bg-gradient-to-r from-[#800020] via-rose-900 to-[#5a0015]"
+  }`}
+>
+
 
       {/* STEP 1 */}
       {step === 1 && (
