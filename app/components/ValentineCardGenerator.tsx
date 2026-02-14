@@ -13,6 +13,13 @@ import {
   Check,
 } from "lucide-react";
 
+interface Sticker {
+  id: number;
+  x: number;
+  y: number;
+  emoji: string;
+}
+
 /* ---------------- LOVE QUOTES ---------------- */
 const loveQuotes: string[] = [
   "You are my today and all of my tomorrows ❤️",
@@ -37,6 +44,12 @@ export default function ValentineCardGenerator() {
   const [error, setError] = useState<string | null>(null);
   const [showCopied, setShowCopied] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
+
+  const [stickers, setStickers] = useState<Sticker[]>([
+    { id: 1, x: 20, y: 20, emoji: "💖" },
+    { id: 2, x: 200, y: 80, emoji: "💕" },
+    { id: 3, x: 100, y: 200, emoji: "💘" },
+  ]);
 
   /* ---------------- VALIDATION ---------------- */
   const validateStepOne = () => {
@@ -80,6 +93,12 @@ export default function ValentineCardGenerator() {
     await navigator.clipboard.writeText(window.location.href);
     setShowCopied(true);
     setTimeout(() => setShowCopied(false), 2000);
+  };
+
+  const moveSticker = (id: number, x: number, y: number) => {
+    setStickers((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, x, y } : s))
+    );
   };
 
   /* ---------------- UI ---------------- */
@@ -188,6 +207,8 @@ export default function ValentineCardGenerator() {
 
           <CardPreview
             {...{ recipient, message, theme, alignment, font }}
+            stickers={stickers}
+            moveSticker={moveSticker}
           />
         </div>
       )}
@@ -197,6 +218,8 @@ export default function ValentineCardGenerator() {
         <div className="text-center">
           <CardPreview
             {...{ recipient, message, theme, alignment, font }}
+            stickers={stickers}
+            moveSticker={moveSticker}
           />
 
           <div className="flex gap-4 justify-center mt-8">
@@ -268,10 +291,7 @@ export default function ValentineCardGenerator() {
             </button>
           </div>
 
-          <button
-            onClick={() => setStep(2)}
-            className="mt-8 underline"
-          >
+          <button onClick={() => setStep(2)} className="mt-8 underline">
             ← Back
           </button>
         </div>
