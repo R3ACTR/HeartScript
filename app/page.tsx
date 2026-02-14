@@ -3,6 +3,8 @@
 import { Heart, Calculator, Flame, MessageCircle, Sparkles, PenTool } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import FloatingHearts from "./algorithms/flames/FloatingHearts";
+
 
 export default function Home() {
   const router = useRouter();
@@ -13,7 +15,7 @@ export default function Home() {
       title: "Love Calculator",
       description: "Calculate the love compatibility between two people using a special algorithm",
       icon: Calculator,
-      color: "from-pink-500 to-rose-500",
+      color: "from-[#F875AA] to-[#FF8FB7]",
       path: "/love-calculator",
     },
     {
@@ -21,7 +23,7 @@ export default function Home() {
       title: "FLAMES Game",
       description: "Discover your relationship status with the classic FLAMES algorithm",
       icon: Flame,
-      color: "from-orange-500 to-red-500",
+      color: "from-[#F875AA] to-[#FF8FB7]",
       path: "/algorithms/flames",
     },
     {
@@ -29,7 +31,7 @@ export default function Home() {
       title: "Couple Nickname",
       description: "Generate cute couple nicknames by combining two names",
       icon: MessageCircle,
-      color: "from-purple-500 to-pink-500",
+      color: "from-[#F875AA] to-[#FF8FB7]",
       path: "/nickname-generator",
     },
     {
@@ -37,13 +39,14 @@ export default function Home() {
       title: "Valentine Card",
       description: "Create and send beautiful personalized valentine cards",
       icon: PenTool,
-      color: "from-red-500 to-pink-500",
+      color: "from-[#F875AA] to-[#FF8FB7]",
       path: "/create",
     },
   ];
 
   return (
     <main className="min-h-screen bg-transparent relative overflow-hidden">
+      <FloatingHearts />
       {/* Dynamic Background Elements (inspired by previous Hero) */}
       <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] bg-pink-300/20 blur-[120px] rounded-full mix-blend-multiply animate-pulse" />
@@ -59,13 +62,27 @@ export default function Home() {
           className="text-center mb-16"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Sparkles className="w-8 h-8 text-pink-500" />
-            <h1 className="font-display text-5xl md:text-6xl font-bold text-gray-900">
+            <motion.img
+            src="/heart.webp"
+            alt="heart"
+            className="w-8 h-8"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 1.1, repeat: Infinity }}
+          />
+
+            <h1 className="font-display text-5xl md:text-6xl font-bold text-[#F075AE]">
               Love Algorithms
             </h1>
-            <Sparkles className="w-8 h-8 text-pink-500" />
+            <motion.img
+            src="/heart.webp"
+            alt="heart"
+            className="w-8 h-8"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 1.1, repeat: Infinity }}
+          />
+
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-[#EE6983] max-w-2xl mx-auto">
             Explore our collection of romantic algorithms and tools to celebrate love
           </p>
         </motion.div>
@@ -81,7 +98,7 @@ export default function Home() {
               onClick={() => router.push(algo.path)}
               className="group cursor-pointer"
             >
-              <div className="relative h-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-white/50">
+              <div className="relative h-full bg-[#] backdrop-blur-sm rounded-2xl shadow-lg hover:bg-[#FFE4EF] hover:shadow-2xl transition-all duration-300 overflow-hidden border border-white/50">
                 
                 {/* Gradient Background */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${algo.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
@@ -90,22 +107,37 @@ export default function Home() {
                 <div className="relative p-8">
                   
                   {/* Icon */}
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${algo.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
-                    <algo.icon className="w-8 h-8 text-white" />
-                  </div>
+              <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+                <img
+                  src={
+                    algo.id === "love-calculator"
+                      ? "/calc.webp"
+                      : algo.id === "flames"
+                      ? "/flames.webp"
+                      : algo.id === "nickname-generator"
+                      ? "/nickname.webp"
+                      : "/val-card.webp"
+                  }
+                  alt={algo.title}
+                  className="w-20 h-20 object-contain drop-shadow-md"
+                />
+              </div>
+
+
+
 
                   {/* Title */}
-                  <h3 className="font-display text-2xl font-bold text-gray-900 mb-3 group-hover:text-pink-600 transition-colors">
+                  <h3 className="font-display text-2xl font-bold text-[#F75270] mb-3 group-hover:text-pink-600 transition-colors">
                     {algo.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-gray-600 leading-relaxed mb-6">
+                  <p className="text-[#E45A92] leading-relaxed mb-6">
                     {algo.description}
                   </p>
 
                   {/* CTA */}
-                  <div className="flex items-center text-pink-600 font-semibold group-hover:gap-3 gap-2 transition-all">
+                  <div className="flex items-center text-[#E45A92] font-semibold group-hover:gap-3 gap-2 transition-all">
                     <span>Try it now</span>
                     <span className="group-hover:translate-x-1 transition-transform">→</span>
                   </div>
