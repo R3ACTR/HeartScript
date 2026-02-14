@@ -27,8 +27,10 @@ export default function LoveCalculator() {
   };
 
   const getMessage = (percentage) => {
-    if (percentage > 90) return "Made for each other 💖";
-    if (percentage > 60) return "Strong Connection 💕";
+    if (percentage >= 95) return "Soulmates 💍";
+    if (percentage >= 85) return "Destined Together 💖";
+    if (percentage >= 70) return "Strong Connection 💕";
+    if (percentage >= 50) return "There’s Potential 🙂";
     return "Keep Trying 😅";
   };
 
@@ -57,7 +59,8 @@ export default function LoveCalculator() {
 
         <button
           onClick={calculateLove}
-          className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+          disabled={!name1 || !name2}
+          className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 disabled:bg-gray-400 transition"
         >
           Calculate Love ❤️
         </button>
@@ -71,7 +74,7 @@ export default function LoveCalculator() {
             <h2 className="text-xl font-semibold">
               {result}% Compatible
             </h2>
-            <p className="mt-2">{getMessage(result)}</p>
+            <p className="mt-2 text-lg">{getMessage(result)}</p>
           </div>
         )}
       </div>
