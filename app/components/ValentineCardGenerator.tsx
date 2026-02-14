@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import CardPreview from "./CardPreview";
-import { Download, FileText, Mail, Heart, ArrowLeft, Send } from "lucide-react";
+import { Download, FileText, Mail, Heart, ArrowLeft, Send, Copy } from "lucide-react";
 //new code 
 const loveQuotes: string[] = [
   "You are my today and all of my tomorrows ❤️",
@@ -33,6 +33,10 @@ export default function ValentineCardGenerator() {
     setTheme("romantic");
     setAlignment("center");
     setFont("serif");
+  };
+
+  const handleClearMessage = () => {
+    setMessage("");
   };
 
   //new code
@@ -226,20 +230,9 @@ export default function ValentineCardGenerator() {
           {/* Left Column - Form */}
           <div className="flex flex-col gap-6">
 
-            <input
-              value={recipient}
-              onChange={e=>setRecipient(e.target.value)}
-              placeholder="Recipient Name"
-              className="px-4 py-4 border-2 rounded-lg"
-            />
+            
 
-            <textarea
-              value={message}
-              onChange={e=>setMessage(e.target.value)}
-              placeholder="Personal Message"
-              rows={5}
-              className="px-4 py-4 border-2 rounded-lg resize-none"
-            />
+            
 
             {/* new code */}
             <button
@@ -252,13 +245,7 @@ export default function ValentineCardGenerator() {
 >
   💌 Generate Random Love Quote
 </button>
-            
-
-            <select value={theme} onChange={e=>setTheme(e.target.value)} className="px-4 py-3 border-2 rounded-lg">
-              <option value="romantic">Romantic</option>
-              <option value="dark">Dark Love</option>
-              <option value="pastel">Pastel Dream</option>
-            </select>
+          
 
             {/* Recipient */}
             <div>
