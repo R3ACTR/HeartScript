@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function LoveDoctor() {
 
   const [name1, setName1] = useState("");
-  const [name2, setName2] = useState("");
+const [name2, setName2] = useState("");
+
+const [loading, setLoading] = useState(false);
+
   const [result, setResult] = useState<null | {
   marriageYear: number;
   kids: number;
@@ -17,30 +21,37 @@ function generatePrediction() {
 
   if (!name1 || !name2) return;
 
-  const combined = name1 + name2;
+  setLoading(true);
+  setResult(null);
 
-  let hash = 0;
+  setTimeout(() => {
 
-  for (let i = 0; i < combined.length; i++) {
-    hash += combined.charCodeAt(i);
-  }
+    const combined = name1 + name2;
 
-  const marriageYear = 2026 + (hash % 7);
+    let hash = 0;
 
-  const kids = hash % 4;
+    for (let i = 0; i < combined.length; i++) {
+      hash += combined.charCodeAt(i);
+    }
 
-  const breakupChance = hash % 101;
+    const marriageYear = 2026 + (hash % 7);
+    const kids = hash % 4;
+    const breakupChance = hash % 101;
+    const strength = 100 - breakupChance;
 
-  const strength = 100 - breakupChance;
+    setResult({
+      marriageYear,
+      kids,
+      breakupChance,
+      strength
+    });
 
-  setResult({
-    marriageYear,
-    kids,
-    breakupChance,
-    strength
-  });
+    setLoading(false);
+
+  }, 2000);
 
 }
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-pink-500 via-rose-500 to-red-600 text-white p-6">
@@ -71,12 +82,29 @@ function generatePrediction() {
 
       <button
   onClick={generatePrediction}
-  className="bg-white text-pink-600 font-bold px-6 py-3 rounded hover:scale-105 transition"
+  disabled={loading}
+  className="bg-white text-pink-600 font-bold px-6 py-3 rounded hover:scale-105 transition disabled:opacity-50"
 >
-  Predict Future
+  {loading ? "Analyzing..." : "Predict Future"}
 </button>
+
+{loading && (
+  <div className="mt-8 text-center">
+    <p className="text-xl font-bold animate-pulse">
+      🔮 Love Doctor is analyzing your future...
+    </p>
+  </div>
+)}
+
+
 {result && (
-  <div className="mt-8 bg-white text-pink-600 p-6 rounded-lg shadow-lg text-center">
+  <motion.div
+    initial={{ opacity: 0, scale: 0.8, y: 40 }}
+    animate={{ opacity: 1, scale: 1, y: 0 }}
+    transition={{ duration: 0.5, ease: "easeOut" }}
+    className="mt-8 bg-white text-pink-600 p-6 rounded-lg shadow-lg text-center"
+  >
+
 
     <h2 className="text-2xl font-bold mb-4">
       🔮 Love Doctor Prediction
@@ -98,7 +126,7 @@ function generatePrediction() {
       ❤️ Relationship Strength: <strong>{result.strength}%</strong>
     </p>
 
-  </div>
+  </motion.div>
 )}
 
 
