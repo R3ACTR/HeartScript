@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CardPreview from "./CardPreview";
 import { Download, FileText, Mail, Heart, ArrowLeft, Send, Copy, Check } from "lucide-react";
 
@@ -14,9 +14,8 @@ const loveQuotes: string[] = [
   "You are the best thing that ever happened to me 💘"
 ];
 
-/* ---------------- COMPONENT ---------------- */
-
 export default function ValentineCardGenerator() {
+
   const [step, setStep] = useState(1);
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
@@ -25,234 +24,203 @@ export default function ValentineCardGenerator() {
   const [font, setFont] = useState("serif");
 
   const [stickers, setStickers] = useState<{ id:number;x:number;y:number;emoji:string }[]>([]);
-  const [showEmoji, setShowEmoji] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+
   const [showCopied, setShowCopied] = useState(false);
-  /* AUDIO STATE */
+  const [showSaved, setShowSaved] = useState(false); // ✅ new state
 
-const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-const [audioURL, setAudioURL] = useState<string | null>(null);
-const [isRecording, setIsRecording] = useState(false);
-const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
-
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioURL, setAudioURL] = useState<string | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
 
   const stickerOptions = ["❤️","🌹","⭐","💖","💘","✨","🎀","💐"];
 
-/* ---------------- STICKERS ---------------- */
+  /* LOAD SAVED DRAFT */
+  useEffect(()=>{
+    const saved = localStorage.getItem("cardDraft");
+    if(!saved) return;
 
-const addSticker = (emoji:string)=>{
-  setStickers(prev=>[...prev,{id:Date.now(),x:120,y:120,emoji}]);
-};
+    const data = JSON.parse(saved);
 
-const moveSticker = (id:number,x:number,y:number)=>{
-  setStickers(prev=>prev.map(s=>s.id===id?{...s,x,y}:s));
-};
+    setRecipient(data.recipient ?? "");
+    setMessage(data.message ?? "");
+    setTheme(data.theme ?? "romantic");
+    setAlignment(data.alignment ?? "center");
+    setFont(data.font ?? "serif");
+    setStickers(data.stickers ?? []);
+    setAudioURL(data.audioURL ?? null);
+  },[]);
 
-/* ---------------- UTIL ---------------- */
+  /* AUTO SAVE */
+  useEffect(()=>{
+    const draft={
+      recipient,
+      message,
+      theme,
+      alignment,
+      font,
+      stickers,
+      audioURL
+    };
+    localStorage.setItem("cardDraft",JSON.stringify(draft));
+  },[recipient,message,theme,alignment,font,stickers,audioURL]);
 
-const handleReset = ()=>{
-  setRecipient("");
-  setMessage("");
-  setTheme("romantic");
-  setAlignment("center");
-  setFont("serif");
-  setStickers([]);
-};
-
-const generateRandomQuote = ()=>{
-  const randomIndex = Math.floor(Math.random()*loveQuotes.length);
-  setMessage(loveQuotes[randomIndex]);
-};
-
-/* AUDIO RECORDING */
-
-const startRecording = async () => {
-
-  try {
-
-    const stream =
-      await navigator.mediaDevices.getUserMedia({ audio: true });
-
-    const recorder = new MediaRecorder(stream);
-
-    const chunks: BlobPart[] = [];
-
-    recorder.ondataavailable = e => chunks.push(e.data);
-
-    recorder.onstop = () => {
-
-      const blob = new Blob(chunks, { type: "audio/webm" });
-
-      setAudioBlob(blob);
-
-      setAudioURL(URL.createObjectURL(blob));
-
+  /* MANUAL SAVE */
+  const handleManualSave=()=>{
+    const draft={
+      recipient,
+      message,
+      theme,
+      alignment,
+      font,
+      stickers,
+      audioURL
     };
 
-    recorder.start();
+    localStorage.setItem("cardDraft",JSON.stringify(draft));
 
-    setMediaRecorder(recorder);
+    setShowSaved(true);
+    setTimeout(()=>setShowSaved(false),2000);
+  };
 
-    setIsRecording(true);
+  /* RESET */
+  const handleReset=()=>{
+    setRecipient("");
+    setMessage("");
+    setTheme("romantic");
+    setAlignment("center");
+    setFont("serif");
+    setStickers([]);
+    setAudioURL(null);
+    localStorage.removeItem("cardDraft");
+  };
 
-  } catch {
+  /* STICKERS */
+  const addSticker=(emoji:string)=>{
+    setStickers(prev=>[...prev,{id:Date.now(),x:120,y:120,emoji}]);
+  };
 
-    alert("Microphone permission denied");
+  const moveSticker=(id:number,x:number,y:number)=>{
+    setStickers(prev=>prev.map(s=>s.id===id?{...s,x,y}:s));
+  };
 
-  }
-};
+  /* QUOTE */
+  const generateRandomQuote=()=>{
+    const randomIndex=Math.floor(Math.random()*loveQuotes.length);
+    setMessage(loveQuotes[randomIndex]);
+  };
 
-const stopRecording = () => {
+  /* AUDIO */
+  const startRecording=async()=>{
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      const recorder=new MediaRecorder(stream);
+      const chunks:BlobPart[]=[];
 
-  if (mediaRecorder) {
+      recorder.ondataavailable=e=>chunks.push(e.data);
 
-    mediaRecorder.stop();
+      recorder.onstop=()=>{
+        const blob=new Blob(chunks,{type:"audio/webm"});
+        setAudioBlob(blob);
+        setAudioURL(URL.createObjectURL(blob));
+      };
 
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+    }catch{
+      alert("Microphone permission denied");
+    }
+  };
+
+  const stopRecording=()=>{
+    mediaRecorder?.stop();
     setIsRecording(false);
+  };
 
-  }
-};
+  const handleAudioUpload=(e:React.ChangeEvent<HTMLInputElement>)=>{
+    const file=e.target.files?.[0];
+    if(file){
+      setAudioBlob(file);
+      setAudioURL(URL.createObjectURL(file));
+    }
+  };
 
-/* AUDIO UPLOAD */
+  /* SHARE */
+  const generateShareLink=()=>{
+    const params=new URLSearchParams({
+      to:recipient,
+      msg:message,
+      theme,
+      align:alignment,
+      font
+    });
+    return `${window.location.origin}/card/view?${params}`;
+  };
 
-const handleAudioUpload =
-(e: React.ChangeEvent<HTMLInputElement>) => {
-
-  const file = e.target.files?.[0];
-
-  if (file) {
-
-    setAudioBlob(file);
-
-    setAudioURL(URL.createObjectURL(file));
-
-  }
-};
-
-
-/* ---------------- SHARE LINK ---------------- */
-
-const generateShareLink = ()=>{
-  const params=new URLSearchParams({
-    to:recipient,
-    msg:message,
-    theme,
-    align:alignment,
-    font
-  });
-
-  return `${window.location.origin}/card/view?${params.toString()}`;
-};
-
-const handleCopyLink = async()=>{
-  try{
+  const handleCopyLink=async()=>{
     const link=generateShareLink();
     await navigator.clipboard.writeText(link);
     setShowCopied(true);
     setTimeout(()=>setShowCopied(false),2000);
-  }catch{
-    alert("Failed to copy link");
-  }
-};
-
-/* ---------------- CARD IMAGE DOM ---------------- */
-
-const createDownloadCard = ()=>{
-  const gradients:any={
-    romantic:"linear-gradient(135deg,#ec4899,#f43f5e,#800020)",
-    dark:"linear-gradient(135deg,#1f2937,#111827,#000)",
-    pastel:"linear-gradient(135deg,#fbcfe8,#e9d5ff,#bfdbfe)"
   };
 
-  const alignMap:any={left:"flex-start",center:"center",right:"flex-end"};
-  const textAlignMap:any={left:"left",center:"center",right:"right"};
+  /* CANVAS */
+  const createDownloadCard=()=>{
+    const gradients:any={
+      romantic:"linear-gradient(135deg,#ec4899,#f43f5e,#800020)",
+      dark:"linear-gradient(135deg,#1f2937,#111827,#000)",
+      pastel:"linear-gradient(135deg,#fbcfe8,#e9d5ff,#bfdbfe)"
+    };
 
-  const card=document.createElement("div");
+    const card=document.createElement("div");
+    card.style.cssText=`position:fixed;left:-9999px;width:400px;height:500px;border-radius:16px;background:${gradients[theme]};color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:${font};padding:40px;text-align:center;`;
 
-  card.style.cssText=`
-  position:fixed;
-  left:-9999px;
-  width:400px;
-  height:500px;
-  border-radius:16px;
-  overflow:hidden;
-  background:${gradients[theme]};
-  `;
+    card.innerHTML=`
+      <h2>Dear ${recipient||"Someone Special"}</h2>
+      <p>${message||"Your message..."}</p>
+      <div>With Love ❤️</div>
+    `;
+    return card;
+  };
 
-  card.innerHTML=`
-  <div style="
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  align-items:${alignMap[alignment]};
-  justify-content:center;
-  text-align:${textAlignMap[alignment]};
-  color:white;
-  padding:40px;
-  font-family:${font};
-  ">
-  <div style="font-size:48px;margin-bottom:20px;">❤️</div>
+  const renderCanvas=async()=>{
+    const html2canvas=(await import("html2canvas")).default;
+    const node=createDownloadCard();
+    document.body.appendChild(node);
+    const canvas=await html2canvas(node,{scale:2});
+    document.body.removeChild(node);
+    return canvas;
+  };
 
-  <h2 style="font-size:36px;font-weight:bold;margin-bottom:20px;">
-  Dear <span style="font-style:italic;text-decoration:underline;">${recipient||"Someone Special"}</span>,
-  </h2>
+  const downloadImage=async(type:"png"|"jpeg")=>{
+    setIsGenerating(true);
+    const canvas=await renderCanvas();
+    const link=document.createElement("a");
+    link.download=`card.${type==="jpeg"?"jpg":"png"}`;
+    link.href=canvas.toDataURL(`image/${type}`,1);
+    link.click();
+    setIsGenerating(false);
+  };
 
-  <p style="font-size:16px;line-height:1.6;max-width:300px;margin-bottom:30px;">
-  ${message||"Your beautiful message will appear here..."}
-  </p>
+  const downloadPDF=async()=>{
+    setIsGenerating(true);
+    const canvas=await renderCanvas();
+    const {jsPDF}=await import("jspdf");
+    const pdf=new jsPDF();
+    pdf.addImage(canvas.toDataURL(),"PNG",10,10,180,220);
+    pdf.save("card.pdf");
+    setIsGenerating(false);
+  };
 
-  <div style="font-style:italic;font-size:20px;">With Love ✨</div>
-  </div>
-  `;
-  return card;
-};
+  const handleEmail=()=>{
+    window.location.href=`mailto:?subject=Valentine Card&body=${message}`;
+  };
 
-/* ---------------- RENDER CANVAS ---------------- */
-
-const renderCanvas = async()=>{
-  const html2canvas=(await import("html2canvas")).default;
-  const node=createDownloadCard();
-  document.body.appendChild(node);
-  const canvas=await html2canvas(node,{scale:2,backgroundColor:"#fff"});
-  document.body.removeChild(node);
-  return canvas;
-};
-
-/* ---------------- DOWNLOAD ---------------- */
-
-const handleDownloadImage=async()=>{
-  setIsGenerating(true);
-  const canvas=await renderCanvas();
-  const link=document.createElement("a");
-  link.download="valentine-card.png";
-  link.href=canvas.toDataURL("image/png");
-  link.click();
-  setIsGenerating(false);
-};
-
-const handleDownloadPDF=async()=>{
-  setIsGenerating(true);
-  const canvas=await renderCanvas();
-  const {jsPDF}=await import("jspdf");
-  const pdf=new jsPDF({orientation:"portrait",unit:"px",format:[400,500]});
-  pdf.addImage(canvas.toDataURL("image/png"),"PNG",0,0,400,500);
-  pdf.save("valentine-card.pdf");
-  setIsGenerating(false);
-};
-
-/* ---------------- EMAIL ---------------- */
-
-const handleEmail=()=>{
-  const subject=encodeURIComponent("Valentine Card for "+recipient);
-  const body=encodeURIComponent(`Dear ${recipient}\n\n${message}\n\nWith Love ❤️`);
-  window.location.href=`mailto:?subject=${subject}&body=${body}`;
-};
-
-/* ---------------- UI ---------------- */
-
-return(
-<main className="flex flex-col items-center px-4 py-8 w-full max-w-6xl mx-auto min-h-screen">
+  /* UI */
+  return(
+  <main className="flex flex-col items-center px-4 py-8 w-full max-w-6xl mx-auto min-h-screen">
 
 {/* STEP BAR */}
 <div className="w-full max-w-2xl mb-12">
@@ -286,89 +254,36 @@ rows={5}
 placeholder="Your Message"
 className="px-4 py-4 border-2 rounded-lg resize-none"/>
 
-{/* AUDIO SECTION */}
-
-<div className="flex flex-col gap-3 border rounded-xl p-4">
-
-<label className="font-semibold text-gray-700">
-🎤 Voice Message
-</label>
-
 <div className="flex gap-3 flex-wrap">
+<button onClick={startRecording} disabled={isRecording}
+className="px-4 py-2 bg-red-500 text-white rounded">Record</button>
 
-<button
-onClick={startRecording}
-disabled={isRecording}
-className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50">
-🎙 Record
-</button>
-
-<button
-onClick={stopRecording}
-disabled={!isRecording}
-className="px-4 py-2 bg-gray-700 text-white rounded disabled:opacity-50">
-⏹ Stop
-</button>
+<button onClick={stopRecording} disabled={!isRecording}
+className="px-4 py-2 bg-gray-700 text-white rounded">Stop</button>
 
 <label className="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer">
-📁 Upload
-<input
-type="file"
-accept="audio/*"
-onChange={handleAudioUpload}
-className="hidden"
-/>
+Upload
+<input type="file" accept="audio/*" onChange={handleAudioUpload} className="hidden"/>
 </label>
-
 </div>
 
-{audioURL && (
-<audio controls className="w-full mt-2">
-<source src={audioURL} />
-</audio>
-)}
+{audioURL && <audio controls src={audioURL} />}
 
-</div>
-
-{/* emoji */}
-<div className="relative">
-<button onClick={()=>setShowEmoji(!showEmoji)} className="text-2xl">😊</button>
-{showEmoji&&(
-<div className="absolute z-50 bg-white border rounded-xl p-3 shadow">
-<div className="grid grid-cols-6 gap-1">
-{["❤️","😍","💕","💖","🌹","✨","💌"].map(e=>(
-<button key={e} onClick={()=>{setMessage(p=>p+e);setShowEmoji(false);}}>
-{e}
-</button>
-))}
-</div>
-</div>
-)}
-</div>
-
-<select value={theme} onChange={e=>setTheme(e.target.value)} className="px-4 py-3 border rounded">
+<select value={theme} onChange={e=>setTheme(e.target.value)}
+className="px-4 py-3 border rounded">
 <option value="romantic">Romantic</option>
 <option value="dark">Dark</option>
 <option value="pastel">Pastel</option>
 </select>
 
-<select value={font} onChange={e=>setFont(e.target.value)} className="px-4 py-3 border rounded">
-<option value="serif">Serif</option>
-<option value="'Great Vibes',cursive">Script</option>
-<option value="'Pacifico',cursive">Fun</option>
-</select>
-
-<div className="grid grid-cols-3 gap-2">
-{["left","center","right"].map(a=>(
-<button key={a} onClick={()=>setAlignment(a as any)}
-className={`py-2 border rounded ${alignment===a?"bg-[#800020] text-white":""}`}>
-{a}
-</button>
-))}
-</div>
-
 <div className="flex gap-4">
+<button onClick={handleManualSave}
+className="flex-1 border py-3 rounded flex items-center justify-center gap-2">
+{showSaved ? <Check size={18}/> : "Save Draft"}
+</button>
+
 <button onClick={handleReset} className="flex-1 border py-3 rounded">Reset</button>
+
 <button disabled={!recipient||!message}
 onClick={()=>setStep(2)}
 className="flex-1 bg-[#800020] text-white py-3 rounded disabled:opacity-50">
@@ -401,6 +316,7 @@ Continue →
 Send <Send/>
 </button>
 </div>
+
 </div>
 )}
 
@@ -422,9 +338,10 @@ Send <Send/>
 {showCopied?"Copied!":"Copy Link"}
 </button>
 
-<button onClick={handleDownloadImage} className="border p-6 rounded"><Download/> PNG</button>
+<button onClick={()=>downloadImage("png")} className="border p-6 rounded"><Download/> PNG</button>
+<button onClick={()=>downloadImage("jpeg")} className="border p-6 rounded"><Download/> JPG</button>
 
-<button onClick={handleDownloadPDF} className="border p-6 rounded"><FileText/> PDF</button>
+<button onClick={downloadPDF} className="border p-6 rounded"><FileText/> PDF</button>
 
 </div>
 
@@ -436,8 +353,6 @@ Send <Send/>
 </main>
 );
 }
-
-/* STEP DOT */
 
 function Step({number,label,active}:{number:number,label:string,active:boolean}){
 return(
