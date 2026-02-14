@@ -137,8 +137,8 @@ export default function LoveCalculator() {
         💘 Calculate Love
       </motion.button>
 
-      {/* 🌸 BEAUTIFUL RESULT ANIMATION */}
-      <AnimatePresence>
+      {/* RESULT ANIMATION */}
+      <AnimatePresence mode="wait">
         {result !== null && (
           <motion.div
             key="love-result"
