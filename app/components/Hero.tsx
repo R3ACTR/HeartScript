@@ -4,10 +4,13 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, Sparkles, Code2, PenTool, Share2 } from "lucide-react";
 
+
 const Hero = () => {
   const [typedText, setTypedText] = useState("");
   const fullText = "I love you, Alex ❤️";
   const [isTyping, setIsTyping] = useState(true);
+  const [hearts, setHearts] = useState<any[]>([]);
+
 
   useEffect(() => {
     let index = 0;
@@ -27,6 +30,17 @@ const Hero = () => {
     }, 150);
     return () => clearInterval(interval);
   }, []);
+  useEffect(() => {
+  const generated = [...Array(12)].map(() => ({
+    x: Math.random() * 100,
+    size: Math.random() * 40 + 20,
+    duration: Math.random() * 10 + 10,
+    delay: Math.random() * 10,
+  }));
+
+  setHearts(generated);
+}, []);
+
 
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#fff0f5] selection:bg-pink-200">
@@ -39,29 +53,33 @@ const Hero = () => {
 
       {/* Floating Hearts Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {[...Array(12)].map((_, i) => (
+        {hearts.map((heart, i) => (
+
           <motion.div
             key={i}
             initial={{
               y: "120vh",
-              x: Math.random() * 100 + "vw",
+              x: heart.x + "vw",
               opacity: 0,
               scale: 0.5,
             }}
+
             animate={{
               y: "-20vh",
               opacity: [0, 1, 0],
               scale: [0.5, 1, 0.5],
             }}
             transition={{
-              duration: Math.random() * 10 + 10,
+              duration: heart.duration,
               repeat: Infinity,
-              delay: Math.random() * 10,
+              delay: heart.delay,
               ease: "linear",
             }}
+
             className="absolute text-pink-300/40"
           >
-            <Heart size={Math.random() * 40 + 20} fill="currentColor" />
+            <Heart size={heart.size} fill="currentColor" />
+
           </motion.div>
         ))}
       </div>
