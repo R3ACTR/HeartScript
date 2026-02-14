@@ -141,16 +141,21 @@ export default function FlamesPage() {
 
         <div className="w-full max-w-md bg-[#] backdrop-blur-md p-8 rounded-3xl shadow-xl border border-white relative transition-all duration-500 transform hover:scale-[1.01]">
           <div className="text-center mb-8">
-            <div className="inline-block p-3 rounded-full bg-pink-100 mb-4 animate-bounce">
-              <Heart className="text-pink-500 fill-pink-500" size={32} />
-            </div>
-            <h1 className="text-4xl font-bold text-pink-800">Flames Calculator</h1>
+            <div className="inline-flex items-center justify-center mb-4">
+            <img
+              src="/heart.webp"
+              alt="3D heart"
+              className="w-14 h-14 animate-heartbeat drop-shadow-lg"
+            />
+          </div>
+
+            <h1 className="text-4xl font-bold text-[#F57799]">Flames Calculator</h1>
             <p className="text-pink-400 mt-2">Discover your FLAMES destiny</p>
           </div>
 
           <div className="space-y-6">
             <div className="group">
-              <label className="block text-sm font-semibold text-pink-700 mb-1 ml-1">Your Name</label>
+              <label className="block text-sm font-semibold text-[#F57799] mb-1 ml-1">Your Name</label>
               <input
                 type="text"
                 value={name1}
@@ -161,7 +166,7 @@ export default function FlamesPage() {
             </div>
 
             <div className="group">
-              <label className="block text-sm font-semibold text-pink-700 mb-1 ml-1">Partner's Name</label>
+              <label className="block text-sm font-semibold text-[#F57799] mb-1 ml-1">Partner's Name</label>
               <input
                 type="text"
                 value={name2}
@@ -177,7 +182,8 @@ export default function FlamesPage() {
               className="w-full py-4 mt-4 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:shadow-pink-200/50 transform transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
             >
               <span className="tracking-wide">Reveal Destiny</span>
-              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:rotate-[-10deg]" />
+              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+
             </button>
           </div>
         </div>

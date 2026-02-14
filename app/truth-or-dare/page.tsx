@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import FloatingHearts from "../algorithms/flames/FloatingHearts";
+import { Heart, Flame, Sparkles } from "lucide-react";
 
 export default function TruthOrDarePage() {
 
-  // ✅ Truth Questions by Category
   const truthData = {
     Romantic: [
       "What was your first impression of me?",
@@ -45,7 +46,6 @@ export default function TruthOrDarePage() {
     ]
   };
 
-  // ✅ Dare Questions by Category
   const dareData = {
     Romantic: [
       "Say something romantic.",
@@ -103,84 +103,113 @@ export default function TruthOrDarePage() {
     setPrompt(random);
   }
 
-  function getCategoryButtonStyle(cat: string) {
-    if (cat === category) return "bg-white text-pink-600";
-    return "bg-white/30 text-white";
-  }
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-pink-500 via-red-400 to-purple-500 text-white p-6">
+    <div className="relative w-full min-h-screen bg-gradient-to-br from-pink-50 via-white to-pink-100 overflow-hidden flex items-center justify-center p-6 text-slate-800">
+      
+      <FloatingHearts />
 
-      <motion.h1
-        className="text-4xl font-bold mb-6"
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        Truth or Dare 💕
-      </motion.h1>
+      <div className="w-full max-w-lg bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-pink-100 relative z-10">
 
-      {/* ✅ Category Selector */}
-      <div className="flex gap-3 mb-6">
-        {["Romantic", "Fun", "Spicy"].map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setCategory(cat as any)}
-            className={`px-4 py-2 rounded-full font-semibold transition ${getCategoryButtonStyle(cat)}`}
+        
+        <div className="text-center mb-8">
+          <img
+            src="/heart.webp"
+            alt="heart"
+            className="w-14 h-14 mx-auto mb-3 animate-heartbeat drop-shadow-lg"
+          />
+          <h1 className="text-3xl font-bold text-[#F57799]">
+            Truth or Dare
+          </h1>
+          <p className="text-pink-400 mt-1">
+            Playful questions for couples
+          </p>
+        </div>
+
+       
+        <div className="flex justify-center gap-3 mb-6">
+          {["Romantic", "Fun", "Spicy"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setCategory(cat as any)}
+              className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 ${
+                cat === category
+                  ? "bg-pink-300 text-white shadow-md"
+                  : "bg-pink-50 text-pink-300 hover:bg-pink-100"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        
+        <div className="flex gap-4 mb-8">
+          <motion.button
+            onClick={getTruth}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="w-full py-4 bg-gradient-to-r from-pink-300 to-pink-500 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:shadow-pink-200/50 transition-all duration-300 flex items-center justify-center gap-2"
           >
-            {cat}
-          </button>
-        ))}
+            <Heart className="w-5 h-5 fill-white" />
+            Truth
+          </motion.button>
+
+          <motion.button
+            onClick={getDare}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="w-full py-4 bg-gradient-to-r from-pink-300 to-pink-500 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:shadow-pink-200/50 transition-all duration-300 flex items-center justify-center gap-2"
+          >
+            <Flame className="w-5 h-5" />
+            Dare
+          </motion.button>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {prompt && (
+            <motion.div
+              key={prompt}
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0 }}
+              className="bg-pink-50 border border-pink-100 p-6 rounded-2xl shadow-md text-center"
+            >
+              <div className="mb-3">
+                <span className="px-3 py-1 text-xs font-semibold rounded-full bg-white text-pink-600 shadow-sm flex items-center justify-center gap-1">
+                  <Sparkles size={12} />
+                  {category}
+                </span>
+              </div>
+
+              <h2 className="text-xl font-bold mb-2 text-pink-700 flex items-center justify-center gap-2">
+                {mode === "truth" ? (
+                  <>
+                    <Heart className="w-5 h-5 text-pink-500 fill-pink-400" />
+                    Truth
+                  </>
+                ) : (
+                  <>
+                    <Flame className="w-5 h-5 text-pink-500" />
+                    Dare
+                  </>
+                )}
+              </h2>
+
+              <p className="text-gray-700">{prompt}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* Truth Dare Buttons */}
-      <div className="flex gap-4 mb-8">
-        <motion.button
-          onClick={getTruth}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-6 py-3 bg-white text-pink-600 font-semibold rounded-xl shadow-lg"
-        >
-          Truth
-        </motion.button>
-
-        <motion.button
-          onClick={getDare}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-6 py-3 bg-white text-purple-600 font-semibold rounded-xl shadow-lg"
-        >
-          Dare
-        </motion.button>
-      </div>
-
-      {/* Card */}
-      <AnimatePresence mode="wait">
-        {prompt && (
-          <motion.div
-            key={prompt}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            className="bg-white text-black p-6 rounded-xl shadow-xl max-w-md text-center"
-          >
-
-            {/* Category Badge */}
-            <div className="mb-3">
-              <span className="px-3 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-600">
-                {category}
-              </span>
-            </div>
-
-            <h2 className="text-xl font-bold mb-2">
-              {mode === "truth" ? "Truth 💖" : "Dare 🔥"}
-            </h2>
-
-            <p>{prompt}</p>
-
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+      <style jsx global>{`
+        @keyframes heartbeat {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.15); }
+        }
+        .animate-heartbeat {
+          animation: heartbeat 1s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 }

@@ -3,8 +3,10 @@
 import { useState } from "react";
 import loveScore from "@/algorithms/loveScore";
 import Link from "next/link";
-import { ArrowLeft, Heart } from "lucide-react";
+import { ArrowLeft, ArrowRight , Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import FloatingHearts from "../algorithms/flames/FloatingHearts";
+
 
 const LoveCalculator = () => {
   const [name1, setName1] = useState("");
@@ -24,7 +26,9 @@ const LoveCalculator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-rose-100 to-red-100 flex flex-col items-center justify-center p-6">
+    <div className="relative w-full min-h-screen bg-gradient-to-br from-pink-50 via-white to-pink-100 overflow-hidden flex flex-col items-center justify-center p-6">
+    <FloatingHearts />
+
       <div className="w-full max-w-lg">
         <Link
           href="/"
@@ -33,38 +37,57 @@ const LoveCalculator = () => {
           <ArrowLeft size={18} /> Back to Home
         </Link>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-pink-200 p-8">
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-pink-100 p-8 relative z-10">
+
           <div className="text-center mb-8">
-            <Heart className="w-12 h-12 text-pink-500 fill-pink-500 mx-auto mb-3 animate-pulse" />
+            <img
+              src="/heart.webp"
+              alt="heart"
+              className="w-14 h-14 mx-auto mb-3 animate-heartbeat drop-shadow-lg"
+            />
+
             <h1 className="text-3xl font-serif font-bold text-pink-700">
-              Love Compatibility Calculator 💘
+              Love Compatibility Calculator 
             </h1>
           </div>
 
           <div className="space-y-4">
             <input
               type="text"
-              placeholder="Enter first name"
+              placeholder="Enter your name"
               value={name1}
               onChange={(e) => setName1(e.target.value)}
-              className="w-full border border-pink-200 rounded-lg p-3 bg-pink-50 text-pink-800 focus:outline-none focus:ring-2 focus:ring-pink-400"
+              className="w-full px-5 py-3 rounded-2xl bg-pink-50 border border-pink-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none transition-all text-gray-700 placeholder-pink-300"
+
             />
             <input
               type="text"
-              placeholder="Enter second name"
+              placeholder="Enter your person's name"
               value={name2}
               onChange={(e) => setName2(e.target.value)}
-              className="w-full border border-pink-200 rounded-lg p-3 bg-pink-50 text-pink-800 focus:outline-none focus:ring-2 focus:ring-pink-400"
+              className="w-full px-5 py-3 rounded-2xl bg-pink-50 border border-pink-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-200 outline-none transition-all text-gray-700 placeholder-pink-300"
+
             />
 
             <motion.button
-              onClick={calculateLove}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-lg font-semibold text-lg shadow-lg shadow-pink-300/50 transition-all"
-            >
-              Calculate Love ❤️
-            </motion.button>
+            onClick={calculateLove}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full py-4 mt-4 
+            bg-gradient-to-r from-pink-300 to-pink-400 
+            hover:from-pink-400 hover:to-pink-450 
+            text-white rounded-2xl font-bold 
+            shadow-lg hover:shadow-xl hover:shadow-pink-200/50 
+            transform transition-all duration-300 
+            hover:-translate-y-0.5 active:scale-[0.98] 
+            flex items-center justify-center gap-2 group"
+
+          >
+            <span className="tracking-wide">Calculate Love</span>
+            <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+          </motion.button>
+
+
           </div>
 
           <AnimatePresence>
