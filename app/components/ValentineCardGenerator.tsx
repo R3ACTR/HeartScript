@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import CardPreview from "./CardPreview";
 
 export default function ValentineCardGenerator() {
   const [recipient, setRecipient] = useState("");
@@ -39,20 +40,10 @@ export default function ValentineCardGenerator() {
 
       </div>
 
-      {/* Preview Section */}
-      <div className="mt-6 border rounded p-4">
-
-        <h3 className="font-semibold">Preview</h3>
-
-        <p>
-          To: {recipient || "Someone Special"}
-        </p>
-
-        <p>
-          {message || "Your message will appear here..."}
-        </p>
-
-      </div>
+      <CardPreview
+  recipient={recipient}
+  message={message}
+/>
 
     </div>
   );
