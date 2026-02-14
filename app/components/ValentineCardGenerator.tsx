@@ -87,6 +87,28 @@ export default function ValentineCardGenerator() {
     setMessage(loveQuotes[randomIndex]);
     setError(null);
   };
+  const handleSurpriseMe = () => {
+  const themes = ["romantic", "cute", "classic"];
+  const fonts = ["serif", "sans", "mono"];
+  const alignments: ("left" | "center" | "right")[] = [
+    "left",
+    "center",
+    "right",
+  ];
+
+  const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+  const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
+  const randomAlignment =
+    alignments[Math.floor(Math.random() * alignments.length)];
+  const randomQuote =
+    loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
+
+  setTheme(randomTheme);
+  setFont(randomFont);
+  setAlignment(randomAlignment);
+  setMessage(randomQuote);
+};
+
 
   const handleCopyLink = async () => {
     await navigator.clipboard.writeText(window.location.href);
@@ -114,6 +136,17 @@ export default function ValentineCardGenerator() {
             >
               💌 Generate Love Quote
             </button>
+
+
+            <button
+  onClick={handleSurpriseMe}
+  className="px-4 py-2 bg-pink-500 text-white rounded-lg transition-all duration-300 hover:bg-pink-600 hover:shadow-md active:scale-95"
+>
+  🎲 Surprise Me
+</button>
+
+
+            
 
             {/* Recipient */}
             <div>
