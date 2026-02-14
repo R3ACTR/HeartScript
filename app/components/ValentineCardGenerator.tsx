@@ -53,6 +53,32 @@ export default function ValentineCardGenerator() {
     { id: 2, x: 220, y: 90, emoji: "💕" },
   ]);
 
+  /* ---------------- LOVE METER ---------------- */
+const calculateLoveScore = () => {
+  let score = 0;
+
+  const romanticWords = ["love", "forever", "heart", "always", "beautiful"];
+
+  // Add score for message length
+  score += Math.min(message.length * 0.5, 50);
+
+  // Add score for romantic keywords
+  romanticWords.forEach((word) => {
+    if (message.toLowerCase().includes(word)) {
+      score += 10;
+    }
+  });
+
+  // Add score for heart emojis
+  const heartCount = (message.match(/❤️|💕|💖|💘|💝/g) || []).length;
+  score += heartCount * 5;
+
+  return Math.min(Math.floor(score), 100);
+};
+
+const loveScore = calculateLoveScore();
+
+
   /* ---------------- VALIDATION ---------------- */
   const validateStepOne = () => {
     if (!recipient.trim()) {
@@ -209,6 +235,22 @@ className="px-4 py-4 w-full rounded-lg border-2 border-gray-300 focus:border-[#8
               >
                 {message.length} / {MESSAGE_LIMIT} characters
               </p>
+
+              {/* Love Meter */}
+<div className="mt-2">
+  <p className="text-sm font-medium">
+    💖 Love Level: {loveScore}%
+  </p>
+  <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+    <div
+      className="bg-pink-500 h-2 rounded-full transition-all duration-500"
+      style={{ width: `${loveScore}%` }}
+    />
+  </div>
+</div>
+
+
+              
             </div>
 
             {/* Emoji picker */}
