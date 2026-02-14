@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import React from "react";
 
 interface Props {
   recipient: string;
@@ -11,7 +12,7 @@ interface Props {
   moveSticker:(id:number,x:number,y:number)=>void;
 }
 
-export default function CardPreview({
+function CardPreview({
   recipient,
   message,
   theme,
@@ -169,3 +170,5 @@ export default function CardPreview({
     </div>
   );
 }
+
+export default React.memo(CardPreview);

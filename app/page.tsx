@@ -105,6 +105,15 @@ export default function Home() {
       color: "from-rose-500 to-pink-500",
       path: "/love-quiz",
     },
+    {
+  id: "spin-the-wheel",
+  title: "Spin the Wheel",
+  description: "Spin the wheel and get a fun romantic action for couples",
+  icon: Sparkles,
+  color: "from-pink-500 to-rose-500",
+  path: "/spin-the-wheel",
+},
+
   ];
 
   return (
