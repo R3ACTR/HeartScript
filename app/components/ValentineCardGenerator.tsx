@@ -472,29 +472,35 @@ Send Card <Send/>
 
 
 
-  <button
+ <button
   onClick={handleWhatsAppShare}
   disabled={!message.trim()}
+  title={!message.trim() ? "Add a message to enable WhatsApp sharing" : ""}
   className="border p-6 rounded hover:bg-green-50 disabled:opacity-50 transition"
 >
   💬 WhatsApp
 </button>
 
+
 <button
   onClick={handleTwitterShare}
   disabled={!message.trim()}
+  title={!message.trim() ? "Write a message to share on Twitter" : ""}
   className="border p-6 rounded hover:bg-gray-100 disabled:opacity-50 transition"
 >
   🐦 Twitter (X)
 </button>
 
+
 <button
   onClick={handleInstagramCopy}
   disabled={!message.trim()}
+  title={!message.trim() ? "Add a message to copy an Instagram caption" : ""}
   className="border p-6 rounded hover:bg-pink-50 disabled:opacity-50 transition"
 >
   {showSocialCopied ? "✅ Copied!" : "📸 Instagram Caption"}
 </button>
+
 
 {typeof navigator !== "undefined" && navigator.share && (
   <button
