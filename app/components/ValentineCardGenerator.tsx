@@ -332,11 +332,19 @@ className="px-4 py-2 bg-[#800020] text-white rounded-lg">
 placeholder="Enter recipient's name"
 
 className="px-4 py-4 border rounded"/>
+<p className="text-sm text-gray-500 mt-1">
+  This name will appear on the card
+</p>
+
 
 <textarea value={message} onChange={e=>setMessage(e.target.value)}
 rows={5}
  placeholder="Write your heartfelt message here…"
 className="px-4 py-4 border-2 rounded-lg resize-none"/>
+<p className="text-sm text-gray-500 mt-1">
+  Your message will be shown exactly as written
+</p>
+
 <p
   className={`text-sm mt-1 ${
     message.length > MESSAGE_LIMIT ? "text-red-500" : "text-gray-500"
