@@ -16,10 +16,15 @@ export default function ValentineCardGenerator() {
     setTheme("romantic");
   };
 
+  /* ✅ NEW: Clear Message Only */
+  const handleClearMessage = () => {
+    setMessage("");
+  };
+
   const handleDownloadImage = async () => {
     try {
-      const html2canvas = (await import("html2canvas")).default;
-
+      const html2canvas = (await import('html2canvas')).default;
+      
       const downloadCard = createDownloadCard();
       document.body.appendChild(downloadCard);
 
@@ -43,9 +48,9 @@ export default function ValentineCardGenerator() {
 
   const handleDownloadPDF = async () => {
     try {
-      const html2canvas = (await import("html2canvas")).default;
-      const { jsPDF } = await import("jspdf");
-
+      const html2canvas = (await import('html2canvas')).default;
+      const { jsPDF } = await import('jspdf');
+      
       const downloadCard = createDownloadCard();
       document.body.appendChild(downloadCard);
 
@@ -224,6 +229,16 @@ export default function ValentineCardGenerator() {
               <p className="text-sm text-gray-500 mt-1">
                 Write a heartfelt message (max 500 characters).
               </p>
+
+              {/* ✅ NEW CLEAR BUTTON */}
+              {message && (
+                <button
+                  onClick={handleClearMessage}
+                  className="mt-2 text-sm text-[#800020] hover:text-[#630019] font-semibold"
+                >
+                  ❤️ Clear Message
+                </button>
+              )}
 
               <div className="text-right text-xs text-gray-400 mt-1">
                 {message.length} / 500 characters
