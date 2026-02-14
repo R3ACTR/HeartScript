@@ -91,7 +91,7 @@ export function calculatePotentialPartners(input: DrakeInput): DrakeResult {
     finalNumber: Math.round(G),
     exactNumber: G,
     steps,
-    formula: 'G = N × fw × fA × fU × fB × fP × fR × fS',
+    formula: 'G = N × fw × fL × fA × fU × fB × fP × fR × fS',
     input
   };
 }
