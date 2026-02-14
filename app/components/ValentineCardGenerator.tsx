@@ -92,7 +92,6 @@ export default function ValentineCardGenerator() {
   const handleEmail = async () => {
     try {
       const html2canvas = (await import("html2canvas")).default;
-
       const downloadCard = createDownloadCard();
       document.body.appendChild(downloadCard);
 
@@ -141,19 +140,18 @@ export default function ValentineCardGenerator() {
 
       document.body.removeChild(downloadCard);
 
-      const imageData = canvas.toDataURL("image/png");
-      
-      // Create a temporary link to download the image
-      const link = document.createElement("a");
-      link.download = `valentine-card-${recipient || "card"}.png`;
-      link.href = imageData;
-      link.click();
-      
-      // Open WhatsApp with pre-filled message
-      const text = encodeURIComponent(`Dear ${recipient},\n${message}\n\nWith Love ❤️`);
-      window.open(`https://wa.me/?text=${text}`, '_blank');
-      
-      alert("Card image downloaded! Now you can share it on WhatsApp.");
+      const imgData = canvas.toDataURL("image/png");
+
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const imgWidth = 190;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+      pdf.save(`valentine-card-${recipient || "card"}.pdf`);
     } catch (error) {
       console.error("WhatsApp sharing failed:", error);
       alert("Failed to prepare card for WhatsApp.");
@@ -162,13 +160,59 @@ export default function ValentineCardGenerator() {
     }
   };
 
-  const handleCopyLink = async () => {
-    try {
-      setIsGenerating(true);
-      const html2canvas = (await import("html2canvas")).default;
+  const createDownloadCard = () => {
+    const themeGradients: Record<string, string> = {
+      romantic:
+        "linear-gradient(135deg, #ec4899 0%, #f43f5e 50%, #800020 100%)",
+      dark:
+        "linear-gradient(135deg, #1f2937 0%, #111827 50%, #000000 100%)",
+      pastel:
+        "linear-gradient(135deg, #fbcfe8 0%, #e9d5ff 50%, #bfdbfe 100%)",
+    };
 
-      const downloadCard = createDownloadCard();
-      document.body.appendChild(downloadCard);
+    const alignMap: Record<string, string> = {
+      left: "flex-start",
+      center: "center",
+      right: "flex-end",
+    };
+
+    const textAlignMap: Record<string, string> = {
+      left: "left",
+      center: "center",
+      right: "right",
+    };
+
+    const card = document.createElement("div");
+    card.style.cssText = `
+      position: fixed;
+      left: -9999px;
+      width: 400px;
+      height: 500px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: ${themeGradients[theme]};
+    `;
+
+    card.innerHTML = `
+      <div style="
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: ${alignMap[alignment]};
+        justify-content: center;
+        text-align: ${textAlignMap[alignment]};
+        color: white;
+        padding: 40px;
+        font-family: 'Playfair Display', serif;
+      ">
+        <div style="font-size: 48px; margin-bottom: 20px;">❤️</div>
+
+        <h2 style="font-size: 36px; font-weight: bold; margin-bottom: 20px;">
+          Dear <span style="font-style: italic; text-decoration: underline;">
+          ${recipient || "Someone Special"}
+          </span>,
+        </h2>
 
       const canvas = await html2canvas(downloadCard, {
         scale: 2,
@@ -269,11 +313,25 @@ export default function ValentineCardGenerator() {
   return (
     <main className="flex-grow flex flex-col items-center justify-center px-4 py-8 w-full max-w-6xl mx-auto">
 
+      {/* STEP BAR */}
+      <div className="w-full max-w-3xl mb-12">
+        <div className="relative flex justify-between items-center text-sm font-semibold text-gray-500">
+          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -z-10" />
+          <div
+            className="absolute top-1/2 left-0 h-0.5 bg-[#800020] -z-10 transition-all duration-500"
+            style={{ width: step === 1 ? "0%" : step === 2 ? "50%" : "100%" }}
+          />
+          <Step number={1} label="Personalize" active={step >= 1} />
+          <Step number={2} label="Preview" active={step >= 2} />
+          <Step number={3} label="Send" active={step >= 3} />
+        </div>
+      </div>
+
+      {/* STEP 1 */}
       {step === 1 && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full items-start">
 
           <div className="flex flex-col gap-8">
-
             <div>
               <h1 className="font-display text-5xl font-bold text-gray-900 mb-3">
                 Create Your<br/>Valentine Card
@@ -283,18 +341,17 @@ export default function ValentineCardGenerator() {
               </p>
             </div>
 
-            {/* Recipient */}
-            <input
-              autoFocus
-              value={recipient}
-              onChange={(e)=>setRecipient(e.target.value)}
-              placeholder="Recipient Name"
-              className="px-4 py-4 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none"
-            />
+            <div>
+              <input
+                autoFocus
+                value={recipient}
+                onChange={(e)=>setRecipient(e.target.value)}
+                placeholder="Recipient Name"
+                className="px-4 py-4 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none"
+              />
+            </div>
 
-            {/* Message */}
-            <div className="relative">
-
+            <div>
               <textarea
                 value={message}
                 onChange={(e)=>setMessage(e.target.value)}
@@ -303,52 +360,8 @@ export default function ValentineCardGenerator() {
                 rows={5}
                 className="px-4 py-4 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none resize-none"
               />
-
-              {/* Emoji Button */}
-              <button
-                type="button"
-                onClick={()=>setShowEmoji(!showEmoji)}
-                className="absolute bottom-3 right-3 text-xl"
-              >
-                😊
-              </button>
-
-              {/* Emoji Picker - Simple emoji list */}
-              {showEmoji && (
-                <div className="absolute z-50 right-0 mt-2 bg-white border-2 border-gray-200 rounded-lg p-2 shadow-lg">
-                  <div className="grid grid-cols-6 gap-1">
-                    {['❤️','😍','💕','💖','💗','💓','💞','💘','💝','🥰','😘','💋','🌹','🌷','💐','🌸','✨','🎁','💍','🎀','💌','🏩','👩‍❤️‍👨','👨‍❤️‍👨','👩‍❤️‍👩','💑','🤗','😻'].map((emoji)=>(
-                      <button
-                        key={emoji}
-                        type="button"
-                        onClick={()=>{
-                          setMessage(prev => prev + emoji);
-                          setShowEmoji(false);
-                        }}
-                        className="text-2xl hover:bg-gray-100 rounded p-1"
-                      >
-                        {emoji}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {message && (
-                <button
-                  onClick={handleClearMessage}
-                  className="mt-2 text-sm text-[#800020] hover:text-[#630019] font-semibold"
-                >
-                  ❤️ Clear Message
-                </button>
-              )}
-
-              <div className="text-right text-xs text-gray-400 mt-1">
-                {message.length} / 500 characters
-              </div>
             </div>
 
-            {/* Theme */}
             <select
               value={theme}
               onChange={(e)=>setTheme(e.target.value)}
@@ -389,7 +402,6 @@ export default function ValentineCardGenerator() {
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-4">
               <button
                 onClick={handleReset}
@@ -398,15 +410,14 @@ export default function ValentineCardGenerator() {
                 Reset
               </button>
 
-              <button 
+              <button
                 onClick={() => setStep(2)}
                 disabled={!recipient || !message}
-                className="flex-1 bg-[#800020] hover:bg-[#630019] text-white font-bold py-4 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-[#800020] hover:bg-[#630019] text-white font-bold py-4 rounded-xl shadow-lg disabled:opacity-50"
               >
                 Next: Preview →
               </button>
             </div>
-
           </div>
 
           <CardPreview
@@ -416,10 +427,64 @@ export default function ValentineCardGenerator() {
             alignment={alignment}
             font={font}
           />
-
         </div>
       )}
 
+      {/* STEP 2 */}
+      {step === 2 && (
+        <div className="w-full max-w-4xl text-center">
+          <h1 className="font-display text-5xl font-bold text-gray-900 mb-6">
+            Preview Your Card
+          </h1>
+
+          <div className="flex justify-center mb-8">
+            <CardPreview
+              recipient={recipient}
+              message={message}
+              theme={theme}
+              alignment={alignment}
+            />
+          </div>
+
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={() => setStep(1)}
+              className="px-8 py-4 border rounded-xl"
+            >
+              Back
+            </button>
+
+            <button
+              onClick={() => setStep(3)}
+              className="px-8 py-4 bg-[#800020] text-white rounded-xl"
+            >
+              Continue →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* STEP 3 */}
+      {step === 3 && (
+        <div className="w-full max-w-4xl text-center">
+          <h1 className="font-display text-5xl font-bold text-gray-900 mb-6">
+            Share Your Love
+          </h1>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <button onClick={handleDownloadImage} className="p-8 border rounded-xl">
+              <Download size={40} className="mx-auto mb-2" />
+              Download PNG
+            </button>
+
+            <button onClick={handleDownloadPDF} className="p-8 border rounded-xl">
+              <FileText size={40} className="mx-auto mb-2" />
+              Download PDF
+            </button>
+
+            <button onClick={handleEmail} className="p-8 border rounded-xl">
+              <Mail size={40} className="mx-auto mb-2" />
+              Email
       {/* STEP 2: PREVIEW */}
       {step === 2 && (
         <div className="w-full max-w-4xl">
@@ -514,116 +579,6 @@ export default function ValentineCardGenerator() {
         </div>
       )}
 
-      {/* STEP 3: SEND */}
-      {step === 3 && (
-        <div className="w-full max-w-4xl">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-[#800020] rounded-full mb-4">
-              <Heart className="w-8 h-8 text-white animate-pulse" />
-            </div>
-            <h2 className="font-display text-3xl font-bold text-gray-900 mb-2">
-              Send Your Card
-            </h2>
-            <p className="text-gray-600">
-              Choose how you want to deliver your heartfelt message
-            </p>
-          </div>
-
-          {/* Send Options */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Email Option */}
-            <button
-              onClick={handleEmail}
-              className="flex items-center gap-4 p-6 bg-white border-2 border-gray-200 hover:border-[#800020] rounded-2xl transition group text-left"
-            >
-              <div className="flex items-center justify-center w-14 h-14 bg-red-50 rounded-xl group-hover:bg-[#800020] transition">
-                <Mail className="w-7 h-7 text-red-500 group-hover:text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 text-lg">Email</h3>
-                <p className="text-gray-500 text-sm">Send via email client</p>
-              </div>
-            </button>
-
-            {/* WhatsApp Option */}
-            <button
-              onClick={handleWhatsApp}
-              disabled={isGenerating}
-              className="flex items-center gap-4 p-6 bg-white border-2 border-gray-200 hover:border-[#25D366] rounded-2xl transition group text-left disabled:opacity-50"
-            >
-              <div className="flex items-center justify-center w-14 h-14 bg-green-50 rounded-xl group-hover:bg-[#25D366] transition">
-                <MessageCircle className="w-7 h-7 text-green-500 group-hover:text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 text-lg">WhatsApp</h3>
-                <p className="text-gray-500 text-sm">Share via WhatsApp</p>
-              </div>
-            </button>
-
-            {/* Copy to Clipboard Option */}
-            <button
-              onClick={handleCopyLink}
-              disabled={isGenerating}
-              className="flex items-center gap-4 p-6 bg-white border-2 border-gray-200 hover:border-[#800020] rounded-2xl transition group text-left disabled:opacity-50"
-            >
-              <div className="flex items-center justify-center w-14 h-14 bg-pink-50 rounded-xl group-hover:bg-[#800020] transition">
-                {showCopied ? (
-                  <Check className="w-7 h-7 text-green-500" />
-                ) : (
-                  <Copy className="w-7 h-7 text-pink-500 group-hover:text-white" />
-                )}
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 text-lg">
-                  {showCopied ? "Copied!" : "Copy Image"}
-                </h3>
-                <p className="text-gray-500 text-sm">
-                  {showCopied ? "Card copied to clipboard" : "Copy to paste anywhere"}
-                </p>
-              </div>
-            </button>
-
-            {/* Download Option */}
-            <button
-              onClick={handleDownloadImage}
-              className="flex items-center gap-4 p-6 bg-white border-2 border-gray-200 hover:border-[#800020] rounded-2xl transition group text-left"
-            >
-              <div className="flex items-center justify-center w-14 h-14 bg-purple-50 rounded-xl group-hover:bg-[#800020] transition">
-                <Download className="w-7 h-7 text-purple-500 group-hover:text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 text-lg">Download</h3>
-                <p className="text-gray-500 text-sm">Save as image file</p>
-              </div>
-            </button>
-          </div>
-
-          {/* Card Preview Mini */}
-          <div className="mb-8">
-            <p className="text-center text-sm text-gray-500 mb-4">Your card</p>
-            <div className="flex justify-center">
-              <div className="w-48 aspect-[4/5] rounded-xl overflow-hidden shadow-lg">
-                <div className={`w-full h-full ${
-                  theme === 'romantic' ? 'bg-gradient-to-br from-[#ec4899] via-[#f43f5e] to-[#800020]' :
-                  theme === 'dark' ? 'bg-gradient-to-br from-[#1f2937] via-[#111827] to-[#000000]' :
-                  'bg-gradient-to-br from-[#fbcfe8] via-[#e9d5ff] to-[#bfdbfe]'
-                }`} />
-              </div>
-            </div>
-          </div>
-
-          {/* Back Button */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => setStep(2)}
-              className="flex items-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-xl transition"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              Back to Preview
-            </button>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
