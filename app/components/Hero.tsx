@@ -111,7 +111,6 @@ const Hero = () => {
           </p>
 
           {/* Buttons */}
-          {/* Buttons */}
 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4 flex-wrap">
 
   {/* CREATE CARD BUTTON */}
@@ -119,7 +118,7 @@ const Hero = () => {
     onClick={() => router.push("/create")}
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
-    className="group relative px-8 py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 transition-all overflow-hidden"
+    className="group relative px-8 py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 hover:shadow-[0_0_35px_rgba(255,105,180,0.55)] transition-all duration-300 overflow-hidden"
   >
     <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
     <span className="flex items-center gap-2">
@@ -132,7 +131,7 @@ const Hero = () => {
     onClick={() => router.push("/love-calculator")}
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
-    className="group relative px-8 py-4 bg-gradient-to-r from-pink-500 to-red-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 transition-all overflow-hidden"
+    className="group relative px-8 py-4 bg-gradient-to-r from-pink-500 to-red-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 hover:shadow-[0_0_35px_rgba(255,105,180,0.55)] transition-all duration-300 overflow-hidden"
   >
     <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
     <span className="flex items-center gap-2">
@@ -145,7 +144,7 @@ const Hero = () => {
     onClick={() => router.push("/nickname-generator")}
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
-    className="group relative px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all overflow-hidden"
+    className="group relative px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 hover:shadow-[0_0_35px_rgba(255,105,180,0.55)] transition-all duration-300 overflow-hidden"
   >
     <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
     <span className="flex items-center gap-2">

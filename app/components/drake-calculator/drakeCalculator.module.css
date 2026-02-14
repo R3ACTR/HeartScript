@@ -1,0 +1,816 @@
+/**
+ * drakeCalculatorValentine.module.css
+ * 
+ * Valentine's Day Special Edition Styles
+ * 
+ * Design Philosophy:
+ * - Uses color psychology to evoke romantic emotions
+ * - Maintains accessibility standards (WCAG 2.1 AA)
+ * - Implements responsive design for mobile romance
+ * - Features micro-interactions for delightful UX
+ * 
+ * Color Palette Reference:
+ * Primary: #C41E3A (Deep Rose) - Passion & Love
+ * Secondary: #8B1538 (Wine Red) - Commitment & Depth  
+ * Accent: #F4C2C2 (Blush Pink) - Tenderness & Romance
+ * Luxury: #F7E7CE (Champagne Gold) - Celebration & Value
+ * Neutral: #FFFAF5 (Cream White) - Warmth & Purity
+ */
+
+/* ============================================
+   IMPORTS & VARIABLES
+   ============================================ */
+
+/* Import romantic serif font for headings + clean sans-serif for body */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+
+/**
+ * CSS Custom Properties (Variables)
+ * Centralized color management for consistent theming
+ */
+:root {
+  /* Primary Romantic Colors */
+  --color-rose-deep: #C41E3A;
+  --color-rose-wine: #8B1538;
+  --color-pink-blush: #F4C2C2;
+  
+  /* Luxury Accent Colors */
+  --color-gold-champagne: #F7E7CE;
+  --color-gold-bright: #FFD700;
+  
+  /* Neutral Backgrounds */
+  --color-white-cream: #FFFAF5;
+  --color-coral-soft: #FF6B6B;
+  --color-lavender-mist: #E6E6FA;
+  
+  /* Gradient Definitions */
+  --gradient-love: linear-gradient(135deg, #C41E3A 0%, #8B1538 100%);
+  --gradient-romantic: linear-gradient(135deg, #F4C2C2 0%, #C41E3A 100%);
+  --gradient-gold-shine: linear-gradient(135deg, #F7E7CE 0%, #FFD700 50%, #F7E7CE 100%);
+  
+  /* Shadow Effects - Romantic Atmosphere */
+  --shadow-soft: 0 10px 40px rgba(196, 30, 58, 0.15);
+  --shadow-romantic: 0 15px 50px rgba(196, 30, 58, 0.2);
+  --shadow-deep-passion: 0 20px 60px rgba(139, 21, 56, 0.3);
+  --shadow-gold-glow: 0 0 30px rgba(247, 231, 206, 0.6);
+  
+  /* Typography */
+  --font-heading: 'Playfair Display', serif;  /* Elegant, romantic */
+  --font-body: 'Inter', sans-serif;           /* Clean, readable */
+  
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 2.5rem;
+  
+  /* Border Radius - Soft, friendly */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+/* ============================================
+   BASE CONTAINER STYLES
+   ============================================ */
+
+/**
+ * Main container wrapper
+ * Centers content and sets up romantic background gradient
+ */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-xl);
+  font-family: var(--font-body);
+  
+  /* Subtle warm gradient background - like sunrise */
+  background: linear-gradient(180deg, #FFFAF5 0%, #F4C2C2 50%, #F4C2C2 100%);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/**
+ * Header section styling
+ * Uses serif font for elegance and romance
+ */
+.header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+  position: relative;
+}
+
+/**
+ * Main title with gradient text effect
+ * Creates visual impact and reinforces brand colors
+ */
+.title {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: var(--gradient-love);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: var(--space-sm);
+  line-height: 1.2;
+}
+
+/**
+ * Subtitle with softer color for hierarchy
+ */
+.subtitle {
+  color: var(--color-rose-wine);
+  font-size: 1.1rem;
+  opacity: 0.8;
+  font-weight: 300;
+}
+
+/* ============================================
+   FORM COMPONENTS
+   ============================================ */
+
+/**
+ * Form layout container
+ * Uses flexbox for vertical stacking with consistent gaps
+ */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/**
+ * Individual form section/card
+ * Glassmorphism effect with subtle transparency
+ */
+.formSection {
+  background: rgba(255, 250, 245, 0.9);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-pink-blush);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover state - increases engagement */
+.formSection:hover {
+  border-color: var(--color-rose-deep);
+  box-shadow: var(--shadow-romantic);
+  transform: translateY(-2px);
+}
+
+/**
+ * Section titles with icon integration
+ */
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--color-rose-wine);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 600;
+}
+
+/* ============================================
+   INPUT ELEMENTS
+   ============================================ */
+
+/**
+ * Select dropdown styling
+ * Custom focus states for accessibility
+ */
+.select {
+  width: 100%;
+  padding: 0.875rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-pink-blush);
+  font-size: 1rem;
+  font-family: var(--font-body);
+  background: white;
+  color: var(--color-rose-wine);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  /* Remove default arrow, add custom via background */
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23C41E3A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+/* Interactive states */
+.select:hover {
+  border-color: var(--color-rose-deep);
+}
+
+.select:focus {
+  border-color: var(--color-rose-deep);
+  box-shadow: 0 0 0 4px rgba(196, 30, 58, 0.1);
+  outline: none;
+}
+
+/* ============================================
+   RANGE SLIDER STYLING
+   ============================================ */
+
+/**
+ * Custom range input for attractiveness slider
+ * Webkit-specific styling for consistent cross-browser appearance
+ */
+.slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, var(--color-pink-blush) 0%, var(--color-rose-deep) 100%);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Slider thumb - draggable handle */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gradient-love);
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+  border: 3px solid white;
+  transition: transform 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider::-webkit-slider-thumb:active {
+  transform: scale(1.1);
+}
+
+/* Firefox compatibility */
+.slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gradient-love);
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+}
+
+/**
+ * Labels below slider
+ */
+.sliderLabel {
+  margin-top: var(--space-md);
+  text-align: center;
+}
+
+.sliderValue {
+  font-weight: 600;
+  color: var(--color-rose-deep);
+  font-size: 1.1rem;
+}
+
+.sliderDescription {
+  color: var(--color-rose-wine);
+  font-size: 0.9rem;
+  margin-top: var(--space-xs);
+  opacity: 0.7;
+}
+
+/* ============================================
+   PERSONALITY TAGS GRID
+   ============================================ */
+
+/**
+ * Grid layout for personality trait buttons
+ * Responsive: 3 columns on desktop, 2 on mobile
+ */
+.tagGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-sm);
+}
+
+/**
+ * Individual tag button
+ * Toggle state managed via CSS classes
+ */
+.tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-pink-blush);
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9rem;
+  color: var(--color-rose-wine);
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+
+.tag:hover {
+  border-color: var(--color-rose-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(196, 30, 58, 0.15);
+}
+
+/**
+ * Selected state - filled with primary color
+ */
+.tagSelected {
+  background: var(--gradient-love);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 5px 20px rgba(196, 30, 58, 0.3);
+}
+
+.tagSelected:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4);
+}
+
+/* Emoji icon within tag */
+.tagIcon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* Helper text showing selected count */
+.tagCount {
+  text-align: center;
+  color: var(--color-rose-deep);
+  font-size: 0.9rem;
+  margin-top: var(--space-md);
+  font-weight: 500;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+/**
+ * Primary call-to-action button
+ * Uses romantic gradient and shadow
+ */
+.calculateButton {
+  padding: 1.25rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  background: var(--gradient-love);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-deep-passion);
+  font-family: var(--font-heading);
+  letter-spacing: 0.5px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer effect on hover */
+.calculateButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.calculateButton:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.calculateButton:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 50px rgba(196, 30, 58, 0.4);
+}
+
+.calculateButton:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.calculateButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/**
+ * Loading spinner animation for calculation state
+ */
+.spinner {
+  animation: spin 2s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/**
+ * Secondary reset button
+ */
+.resetButton {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-family: var(--font-heading);
+  background: var(--gradient-love);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.resetButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-deep-passion);
+}
+
+/* ============================================
+   RESULTS DISPLAY
+   ============================================ */
+
+/**
+ * Main results card container
+ * Entrance animation defined here
+ */
+.resultCard {
+  background: var(--color-white-cream);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-deep-passion);
+  border: 3px solid var(--color-pink-blush);
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/**
+ * Results header with gradient background
+ */
+.resultHeader {
+  padding: var(--space-2xl);
+  text-align: center;
+  color: white;
+  background: var(--gradient-love);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative background pattern */
+.resultHeader::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.resultEmoji {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: var(--space-md);
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+/* Pulsing heart animation */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.resultTitle {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.resultBody {
+  padding: var(--space-2xl);
+}
+
+/**
+ * Large number display with gradient text
+ */
+.bigNumber {
+  font-family: var(--font-heading);
+  font-size: 5rem;
+  font-weight: 700;
+  background: var(--gradient-romantic);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  margin: var(--space-md) 0;
+  filter: drop-shadow(0 4px 6px rgba(196, 30, 58, 0.2));
+}
+
+.resultSubtitle {
+  font-size: 1.3rem;
+  color: var(--color-rose-wine);
+  margin-bottom: var(--space-lg);
+  font-weight: 500;
+}
+
+/**
+ * Humor text/description box
+ */
+.humorText {
+  background: rgba(244, 194, 194, 0.2);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--color-rose-wine);
+  margin-bottom: var(--space-xl);
+  border: 1px solid var(--color-pink-blush);
+}
+
+/* ============================================
+   CALCULATION STEPS
+   ============================================ */
+
+.stepsSection {
+  text-align: left;
+  margin-bottom: var(--space-xl);
+}
+
+.stepsSection h3 {
+  color: var(--color-rose-deep);
+  margin-bottom: var(--space-sm);
+  font-family: var(--font-heading);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Mathematical formula code block */
+.formula {
+  font-family: 'Courier New', monospace;
+  background: rgba(247, 231, 206, 0.3);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-md);
+  overflow-x: auto;
+  color: var(--color-rose-wine);
+  border: 1px solid var(--color-gold-champagne);
+}
+
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/**
+ * Individual calculation step item
+ * Features left border accent and hover effect
+ */
+.stepItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md);
+  background: rgba(255, 250, 245, 0.9);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-rose-deep);
+  border-top: 1px solid var(--color-pink-blush);
+  border-right: 1px solid var(--color-pink-blush);
+  border-bottom: 1px solid var(--color-pink-blush);
+  transition: all 0.2s ease;
+}
+
+.stepItem:hover {
+  background: white;
+  transform: translateX(5px);
+  box-shadow: var(--shadow-soft);
+}
+
+.stepInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.stepLabel {
+  font-weight: 600;
+  color: var(--color-rose-wine);
+  font-size: 0.95rem;
+}
+
+.stepSymbol {
+  font-size: 0.85rem;
+  color: var(--color-rose-deep);
+  font-family: monospace;
+  opacity: 0.8;
+}
+
+.stepValues {
+  text-align: right;
+}
+
+.stepPercentage {
+  font-weight: 700;
+  color: var(--color-rose-deep);
+  display: block;
+  font-size: 1.1rem;
+  font-family: var(--font-heading);
+}
+
+.stepRunning {
+  font-size: 0.85rem;
+  color: var(--color-rose-wine);
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Error message styling */
+.errorMessage {
+  background: rgba(196, 30, 58, 0.1);
+  color: var(--color-rose-wine);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+  text-align: center;
+  border: 1px solid var(--color-rose-deep);
+  font-weight: 500;
+}
+
+/* Checkbox label alignment */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--color-rose-wine);
+  user-select: none;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-rose-deep);
+}
+
+/* Field descriptions/helper text */
+.fieldDescription {
+  color: var(--color-rose-wine);
+  font-size: 0.9rem;
+  margin-top: var(--space-xs);
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/**
+ * Mobile optimizations
+ * Ensures romantic experience on all devices
+ */
+@media (max-width: 640px) {
+  .container {
+    padding: var(--space-md);
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .bigNumber {
+    font-size: 3.5rem;
+  }
+  
+  /* Stack tags in 2 columns on mobile */
+  .tagGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .formSection {
+    padding: var(--space-md);
+  }
+  
+  .resultHeader {
+    padding: var(--space-lg);
+  }
+  
+  .resultBody {
+    padding: var(--space-lg);
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    padding: var(--space-lg);
+  }
+  
+  .bigNumber {
+    font-size: 4rem;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--color-rose-deep);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .formSection,
+  .stepItem,
+  .resultCard {
+    border-width: 3px;
+  }
+  
+  .calculateButton,
+  .resetButton {
+    border: 2px solid white;
+  }
+}
+
+/* Print styles - remove romantic backgrounds for readability */
+@media print {
+  .container {
+    background: white;
+  }
+  
+  .resultHeader {
+    background: var(--color-rose-deep) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
