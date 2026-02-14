@@ -42,6 +42,13 @@ A technical section where contributors can implement fun and logical romantic pr
 
 - **Requirements:** Each algorithm must be accompanied by explanations and a **time complexity analysis**.
 
+#### 3. 📥 Download Your Card
+
+New! Download your created cards as high-quality images:
+- Beautiful vintage "love letter seal" interface
+- PNG and JPEG format options
+- Professional quality output
+- Mobile-friendly design
 ---
 
 ## 🛠️ Tech Stack

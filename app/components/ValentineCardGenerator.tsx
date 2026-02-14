@@ -127,8 +127,8 @@ export default function ValentineCardGenerator() {
 
   /* ---------------- UI ---------------- */
   return (
-   <main
-  className={`flex flex-col items-center px-4 py-8 w-full max-w-6xl mx-auto min-h-screen transition-all duration-700 ${
+<main
+  className={`flex flex-col items-center px-4 py-6 sm:py-8 w-full max-w-6xl mx-auto min-h-screen overflow-x-hidden transition-all duration-700 ${
     theme === "romantic"
       ? "bg-gradient-to-r from-pink-200 via-rose-200 to-pink-300 animate-pulse"
       : theme === "cute"
@@ -140,14 +140,14 @@ export default function ValentineCardGenerator() {
 
       {/* STEP 1 */}
       {step === 1 && (
-        <div className="grid lg:grid-cols-2 gap-12 w-full">
-          <div className="flex flex-col gap-6">
-            <button
-              onClick={generateRandomQuote}
-              className="px-4 py-2 bg-[#800020] text-white rounded-lg"
-            >
-              💌 Generate Love Quote
-            </button>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full items-start">
+  <div className="flex flex-col gap-6">
+    <button
+      onClick={generateRandomQuote}
+      className="px-4 py-2 bg-[#800020] text-white rounded-lg"
+    >
+      💌 Generate Love Quote
+    </button>
 
 
             <button
@@ -162,20 +162,29 @@ export default function ValentineCardGenerator() {
 
             {/* Recipient */}
             <div>
-              <input
-                value={recipient}
-                onChange={(e) => {
-                  setRecipient(e.target.value);
-                  setError(null);
-                }}
-                placeholder="Enter recipient's name"
-                className="px-4 py-4 border rounded w-full"
-              />
-              <p className="text-sm text-gray-500 mt-1">
-                This name will appear on the card
-              </p>
-            </div>
+<h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+  Create Your<br />Valentine Card
+</h1>
+<p className="text-gray-600">
+  Craft a message straight from the heart.
+</p>
+</div>
 
+{/* Recipient */}
+<input
+  autoFocus
+  value={recipient}
+  onChange={(e) => {
+    setRecipient(e.target.value);
+    setError(null);
+  }}
+  placeholder="Enter recipient's name"
+  className="px-4 py-4 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none transition text-base"
+/>
+
+<p className="text-sm text-gray-500 mt-1">
+  This name will appear on the card
+</p>
             {/* Message */}
             <div>
               <textarea
@@ -185,8 +194,8 @@ export default function ValentineCardGenerator() {
                   setError(null);
                 }}
                 rows={5}
-                placeholder="Write your heartfelt message here…"
-                className="px-4 py-4 border-2 rounded-lg resize-none w-full"
+placeholder="Write your heartfelt message here…"
+className="px-4 py-4 w-full rounded-lg border-2 border-gray-300 focus:border-[#800020] outline-none resize-none text-base"
               />
               <p className="text-sm text-gray-500 mt-1">
                 Your message will be shown exactly as written
@@ -205,9 +214,10 @@ export default function ValentineCardGenerator() {
             {/* Emoji picker */}
             <div className="relative">
               <button
-                title="Add emoji"
-                onClick={() => setShowEmoji(!showEmoji)}
-                className="text-2xl"
+type="button"
+title="Add emoji"
+onClick={() => setShowEmoji(!showEmoji)}
+className="absolute bottom-3 right-3 text-2xl p-2 rounded-full hover:bg-pink-100 transition"
               >
                 😊
               </button>
