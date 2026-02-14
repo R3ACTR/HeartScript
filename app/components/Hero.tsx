@@ -110,30 +110,50 @@ const Hero = () => {
           </p>
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+          {/* Buttons */}
+<div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4 flex-wrap">
 
-            {/* CREATE CARD BUTTON */}
-            <motion.button
-              onClick={() => router.push("/create")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative px-8 py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 transition-all overflow-hidden"
-            >
-              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-              <span className="flex items-center gap-2">
-                <PenTool size={20} /> Create Your Card
-              </span>
-            </motion.button>
+  {/* CREATE CARD BUTTON */}
+  <motion.button
+    onClick={() => router.push("/create")}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="group relative px-8 py-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 transition-all overflow-hidden"
+  >
+    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+    <span className="flex items-center gap-2">
+      <PenTool size={20} /> Create Your Card
+    </span>
+  </motion.button>
 
-            {/* EXPLORE BUTTON */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-white border border-pink-200 rounded-xl text-gray-700 font-semibold text-lg shadow-sm hover:bg-pink-50 hover:border-pink-300 transition-all flex items-center gap-2 justify-center"
-            >
-              <Code2 size={20} className="text-pink-500" /> Explore Algorithms
-            </motion.button>
-          </div>
+  {/* LOVE CALCULATOR BUTTON */}
+  <motion.button
+    onClick={() => router.push("/love-calculator")}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="group relative px-8 py-4 bg-gradient-to-r from-pink-500 to-red-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 transition-all overflow-hidden"
+  >
+    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+    <span className="flex items-center gap-2">
+      <Heart size={20} /> Love Calculator
+    </span>
+  </motion.button>
+
+  {/* NICKNAME GENERATOR BUTTON */}
+  <motion.button
+    onClick={() => router.push("/nickname-generator")}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="group relative px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white font-semibold text-lg shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all overflow-hidden"
+  >
+    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+    <span className="flex items-center gap-2">
+      <Code2 size={20} /> Cute Nickname Generator
+    </span>
+  </motion.button>
+
+</div>
+
         </motion.div>
 
         {/* RIGHT CARD PREVIEW */}
