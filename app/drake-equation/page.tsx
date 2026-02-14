@@ -1,11 +1,17 @@
 "use client";
 
-import { DrakeCalculator } from "../components/drake-calculator";
+import { DrakeCalculator } from "@/app/components/drake-calculator";
+import FloatingHearts from "@/app/components/FloatingHearts";
 
 export default function DrakeEquationPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4">
+    <main className="premium-romantic-bg premium-vignette relative min-h-screen py-10">
+      
+      {/* 💗 Floating Background Hearts */}
+      <FloatingHearts />
+
       <DrakeCalculator />
+
     </main>
   );
 }

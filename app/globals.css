@@ -5,6 +5,37 @@
 @import "tailwindcss";
 
 /* ================================= */
+/* 💗 LIGHT PINK PREMIUM BACKGROUND */
+/* ================================= */
+
+.premium-romantic-bg {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 192, 203, 0.18), transparent 45%),
+    radial-gradient(circle at 80% 30%, rgba(255, 182, 193, 0.15), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(255, 210, 220, 0.18), transparent 45%),
+    linear-gradient(-45deg, #fff5f7, #ffeef2, #fff5f7, #ffeef2);
+
+  background-size: 400% 400%;
+  animation: premiumGradientMove 28s ease infinite;
+}
+
+@keyframes premiumGradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Soft depth edges */
+.premium-vignette::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center, transparent 65%, rgba(255, 182, 193, 0.08) 100%);
+}
+
+/* ================================= */
 /* THEME */
 /* ================================= */
 
@@ -37,9 +68,9 @@
 }
 
 body {
-  background: linear-gradient(-45deg, #fff1f2, #ffe4e6, #fff1f2, #ffe4e6);
+  background: linear-gradient(-45deg, #fff5f7, #ffeef2, #fff5f7, #ffeef2);
   background-size: 400% 400%;
-  animation: gradientBG 18s ease infinite;
+  animation: gradientBG 20s ease infinite;
 
   color: var(--color-foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -110,8 +141,8 @@ body {
     transform: translateY(100vh);
     opacity: 0;
   }
-  30% { opacity: 0.06; }
-  60% { opacity: 0.12; }
+  30% { opacity: 0.05; }
+  60% { opacity: 0.10; }
   100% {
     transform: translateY(-10vh);
     opacity: 0;
